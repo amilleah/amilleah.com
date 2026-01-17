@@ -1,0 +1,23 @@
+---
+import { EMAIL, GITHUB, SUBSTACK, SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout
+  title={SITE_TITLE}
+  description={SITE_DESCRIPTION}
+  className="flex h-svh max-w-sm flex-col justify-center"
+  headerInContent
+>
+  <main class="space-y-5">
+    <p>
+    amilleah <span class="text-zinc-500/70 dark:text-zinc-400/70">/əˈmɪliə/</span> is a cognitive scientist, linguist, and a second-dan black belt in taekwondo. they enjoy programming and human languages, tea, and minecraft. they have two cats.
+    </p>
+    <p class="text-sm text-zinc-500">
+      find them on
+      <a class="hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors underline decoration-zinc-300 underline-offset-2" href={GITHUB}>github</a> and
+      <a class="hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors underline decoration-zinc-300 underline-offset-2" href={SUBSTACK}>substack</a>, or
+      <a class="hover:text-zinc-700 dark:hover:text-zinc-300 transition-colors underline decoration-zinc-300 underline-offset-2" href={`mailto:${EMAIL}`}>say hello</a>.
+    </p>
+  </main>
+</Layout>

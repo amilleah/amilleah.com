@@ -1,0 +1,77 @@
+---
+interface Props {
+  src: string;
+  className?: string;
+  placeholder?: string;
+}
+
+const { src, className, placeholder = "loading ansi..." } = Astro.props;
+---
+
+<div class={`ansi-output ${className ?? ""}`} data-ansi-src={src}>
+  <div class="ansi-placeholder text-zinc-500 animate-pulse">{placeholder}</div>
+</div>
+
+<script>
+  import { AnsiUp } from "ansi_up";
+
+  async function loadAnsi(el: Element) {
+    if (!(el instanceof HTMLElement)) return;
+    if (el.dataset.ansiLoaded === "true") return;
+
+    const src = el.dataset.ansiSrc;
+    if (!src) return;
+
+    el.dataset.ansiLoaded = "true";
+
+    try {
+      const res = await fetch(src);
+      if (!res.ok) {
+        throw new Error(`file not found: ${src} (${res.status})`);
+      }
+
+      const text = await res.text();
+      const ansi = new AnsiUp();
+      ansi.use_classes = false;
+
+      el.innerHTML = ansi.ansi_to_html(text);
+    } catch (e) {
+      el.innerHTML = `<span class="text-red-500">ansi failed to load.</span>`;
+      console.error(e);
+    }
+  }
+
+  function loadAllAnsi() {
+    document
+      .querySelectorAll("[data-ansi-src]")
+      .forEach((el) => loadAnsi(el));
+  }
+
+  document.addEventListener("astro:page-load", loadAllAnsi);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadAllAnsi, { once: true });
+  } else {
+    loadAllAnsi();
+  }
+</script>
+
+<style>
+  .ansi-output {
+    font-family: "Mononoki", monospace;
+    line-height: 1 !important;
+    font-variant-ligatures: none;
+    font-kerning: none;
+    letter-spacing: 0;
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    white-space: pre;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .ansi-output span {
+    display: inline-block;
+  }
+</style>

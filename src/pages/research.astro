@@ -1,0 +1,35 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { getResearchHtml } from "../lib/research";
+
+const { publicationsHtml, presentationsHtml } = getResearchHtml();
+---
+
+<Layout title="research" description="about my research.">
+  <main class="space-y-6">
+    <header class="space-y-2">
+      <h1 class="text-lg font-medium tracking-tight">research</h1>
+      <p class="text-sm text-zinc-400">
+        language, meaning, and computation
+      </p>
+    </header>
+    <div class="h-px w-16 bg-zinc-200"></div>
+    <p class="text-zinc-500">
+      My work investigates the computational constraints on language processing in biological and artificial systems.
+      I am specifically interested in how compositional meaning is constructed incrementally and how predictive mechanisms operate over the output of those computations.
+      I use human neural dynamics (MEG), behavioral measures (reading in RSVP and RPVP), and artificial language systems (LLMs) to address these questions.
+    </p>
+    <section class="space-y-2">
+      <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400">
+        Publications
+      </h2>
+      <div set:html={publicationsHtml}></div>
+    </section>
+    <section class="space-y-2">
+      <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400">
+        Presentations
+      </h2>
+      <div set:html={presentationsHtml}></div>
+    </section>
+  </main>
+</Layout>

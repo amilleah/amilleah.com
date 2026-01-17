@@ -1,0 +1,115 @@
+<div id="tarot-wrapper" class="flex flex-col items-center gap-3">
+  <div id="tarot-display" class="card-output font-mono text-sm whitespace-pre bg-black p-2 rounded-lg shadow-2xl inline-block text-left relative overflow-x-auto max-w-full">
+    <div class="animate-pulse text-zinc-500">reading the stars...</div>
+  </div>
+  <p id="card-name" class="text-xs font-mono text-zinc-500 opacity-0 transition-opacity duration-700"></p>
+  <p id="debug-error" class="text-red-400 font-mono text-[10px] max-w-md text-center mt-2 hidden"></p>
+</div>
+
+<script>
+  import { getRandomCard, type CardData } from "../lib/tarot";
+  import { AnsiUp } from "ansi_up";
+
+  const TODAY_KEY = `tarot_draw_v3_${new Date().toDateString()}`;
+
+  function getVisibleLength(str: string) {
+    return str.replace(/\x1b\[[0-9;]*m/g, "").length;
+  }
+
+  function wrapArt(rawArt: string, shorthand: string) {
+    const cleanArt = rawArt
+      .replace(/\x1b\[\?25[lh]/g, "")
+      .replace(/\\/g, "")
+      .trim();
+
+    const lines = cleanArt.split("\n");
+    const INNER_WIDTH = 4;
+
+    const topPadLen = Math.max(0, INNER_WIDTH - getVisibleLength(shorthand));
+    const topPadding = "─".repeat(topPadLen);
+    const whiteOn = "\x1b[97m";
+    const reset = "\x1b[0m";
+    const topBorder = `${whiteOn}╭${shorthand}${topPadding}╮${reset}`;
+
+    const botPadLen = Math.max(0, INNER_WIDTH - getVisibleLength(shorthand));
+    const botPadding = "─".repeat(botPadLen);
+    const botBorder = `${whiteOn}╰${botPadding}${shorthand}╯${reset}`;
+
+    const middleLines = lines.map((line) => {
+      const visibleLen = getVisibleLength(line);
+      const padding = " ".repeat(Math.max(0, INNER_WIDTH - visibleLen));
+      return `${whiteOn}│${reset}${line}${padding}${whiteOn}│${reset}`;
+    });
+
+    return [topBorder, ...middleLines, botBorder].join("\n");
+  }
+
+  async function loadCard() {
+    const display = document.getElementById("tarot-display");
+    const nameDisplay = document.getElementById("card-name");
+    const errorDisplay = document.getElementById("debug-error");
+    let card: CardData;
+
+    try {
+      const ansi = new AnsiUp();
+      ansi.use_classes = false;
+
+      const saved = localStorage.getItem(TODAY_KEY);
+      if (saved) {
+        card = JSON.parse(saved);
+      } else {
+        card = getRandomCard();
+        localStorage.setItem(TODAY_KEY, JSON.stringify(card));
+      }
+
+      const res = await fetch(`/ansi/tarot/${card.file}`);
+
+      if (!res.ok) {
+        throw new Error(`file not found: ansi/tarot/${card.file} (${res.status})`);
+      }
+
+      const text = await res.text();
+      const wrappedText = wrapArt(text, card.shorthand);
+      const html = ansi.ansi_to_html(wrappedText);
+
+      if (display && nameDisplay) {
+        display.innerHTML = html;
+        nameDisplay.textContent = card.name.toLowerCase();
+        nameDisplay.classList.remove("opacity-0");
+      }
+    } catch (e: any) {
+      if (display) {
+        display.innerHTML = `<span class="text-red-500">the cards are silent today.</span>`;
+      }
+      if (errorDisplay) {
+        errorDisplay.textContent = `error: ${e.message}`;
+        errorDisplay.classList.remove("hidden");
+      }
+      console.error(e);
+    }
+  }
+
+  document.addEventListener("astro:page-load", loadCard);
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadCard, { once: true });
+  } else {
+    loadCard();
+  }
+</script>
+
+<style is:global>
+  .card-output {
+    font-family: "Mononoki", monospace;
+    line-height: 1 !important;
+    font-variant-ligatures: none;
+    font-kerning: none;
+    letter-spacing: 0;
+    text-rendering: optimizeSpeed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  .card-output span {
+    display: inline-block;
+  }
+</style>

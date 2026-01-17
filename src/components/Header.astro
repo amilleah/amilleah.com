@@ -1,0 +1,71 @@
+---
+import { EMAIL } from "../consts";
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-header__logo" href="/" aria-label="Home">
+      <img src="/favicon.svg" alt="" width="22" height="22" loading="eager" />
+    </a>
+    <nav class="site-header__nav">
+      <a href="/now"> now </a>
+      <a href="/research"> research </a>
+      <a href="/etc"> etc. </a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    width: 100%;
+    margin-bottom: 1.5rem;
+  }
+
+  .site-header__inner {
+    width: 100%;
+    max-width: var(--site-header-max-width, 56rem);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  @media (max-width: 700px) {
+    .site-header__inner {
+      width: 100%;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+  }
+
+  .site-header__logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .site-header__logo img {
+    display: block;
+  }
+
+  .site-header__nav {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 1rem;
+  }
+
+  @media (max-width: 700px) {
+    .site-header__nav {
+      width: 100%;
+      justify-content: flex-start;
+      text-align: left;
+      flex-wrap: wrap;
+    }
+  }
+
+  a {
+    @apply font-medium text-zinc-500 hover:text-zinc-900 hover:underline dark:hover:text-zinc-100;
+  }
+</style>

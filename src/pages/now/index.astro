@@ -1,0 +1,169 @@
+---
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
+import Layout from "../../layouts/Layout.astro";
+import { formatDate } from "../../lib/utils";
+import "@fancyapps/ui/dist/fancybox/fancybox.css";
+
+const collection = await getCollection("now");
+const posts = collection.sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  "../../content/images/*.{jpg,jpeg,png,webp}",
+);
+---
+
+<Layout title="now" description="right now.">
+  <main
+    class="grid gap-[calc(var(--space))] md:grid-cols-[2fr_5fr]"
+    style="--space: max(1vw, 3px);"
+  >
+    <section class="space-y-6">
+      <header class="space-y-2">
+        <h1 class="text-lg font-medium tracking-tight">now</h1>
+        <p class="text-sm text-zinc-400">
+          inspired by <a class="whitespace-nowrap hover:underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-500" href="https://nownownow.com"
+            >nownownow.com<span class="hover:underline"></span></a>.
+        <br />
+          you can find my weekly updates on <a class="whitespace-nowrap hover:underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-500" href="https://inprogress.works"
+          >inprogress.works<span class="hover:underline"></span></a>.
+        <br /> <br />
+          gallery built with <a class="whitespace-nowrap hover:underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-500" href="https://github.com/evadecker/astro-photo-grid"
+            >astro-photo-grid<span class="hover:underline"></span></a>.
+        <br />
+        </p>
+      </header>
+      <div class="h-px w-16 bg-zinc-200"></div>
+      <ul class="flex flex-col gap-1.5 px-2 md:px-0">
+        {
+          posts.map((post) => (
+            <li>
+              <a
+                href={`/now/${post.slug}`}
+                class="group grid gap-1"
+              >
+                <span class="text-xs text-zinc-500">
+                  {formatDate(post.data.date)}
+                </span>
+                <span class="group-hover:underline">{post.data.title}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+    <section class="justified-gallery" id="photoswipe">
+      {
+        Object.entries(images).map(async ([_path, image], index) => {
+          const { default: imageData } = await image();
+          return (
+            <a
+              style={`--width: ${imageData.width}; --height: ${imageData.height};`}
+              href={imageData.src}
+              data-fancybox="gallery"
+            >
+              <Image
+                format="webp"
+                src={imageData}
+                alt=""
+                height={400}
+                loading={index < 20 ? "eager" : "lazy"}
+              />
+            </a>
+          );
+        })
+      }
+    </section>
+  </main>
+</Layout>
+
+<script>
+  import { Fancybox } from "@fancyapps/ui/dist/fancybox";
+
+  Fancybox.bind("[data-fancybox]", {
+    theme: "auto",
+    mainStyle: {
+      "--f-button-width": "44px",
+      "--f-button-height": "44px",
+      "--f-button-border-radius": "50%",
+      "--f-toolbar-padding": "16px",
+    },
+    Carousel: {
+      Arrows: true,
+      Toolbar: {
+        display: {
+          left: [],
+          middle: [],
+          right: ["close"],
+        },
+      },
+      transition: "fade",
+    },
+  });
+</script>
+
+<style>
+  .justified-gallery {
+    --padding: max(1vw, 6px);
+    --space: max(1vw, 3px);
+
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    column-gap: var(--space);
+    column-count: 3;
+  }
+
+  @media (max-width: 1100px) {
+    .justified-gallery {
+      column-count: 2;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .justified-gallery {
+      column-count: 1;
+    }
+  }
+
+  .justified-gallery a {
+    display: inline-block;
+    width: 100%;
+    margin: 0 0 var(--space);
+    overflow: hidden;
+    opacity: 1;
+    break-inside: avoid;
+    transition: all 0.05s ease-in-out;
+  }
+
+  .justified-gallery a img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .justified-gallery a:focus-visible {
+    outline: 3px solid var(--outline);
+    outline-offset: 2px;
+    transform: scale(1.05);
+    z-index: 1;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .justified-gallery a.hidden {
+    transition: opacity 0.4s ease-in-out;
+    opacity: 0;
+  }
+
+  .justified-gallery::after {
+    content: "";
+  }
+
+  :global(.fancybox__thumbs) {
+    display: none;
+  }
+</style>

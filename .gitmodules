@@ -1,0 +1,3 @@
+[submodule "src/components/astro-photo-grid"]
+	path = src/components/astro-photo-grid
+	url = https://github.com/evadecker/astro-photo-grid.git
