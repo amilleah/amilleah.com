@@ -105,7 +105,7 @@ export default function Clippings() {
           </p>
         )}
 
-        <div className="flex flex-wrap items-baseline gap-x-4 gap-y-6 mb-8">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-6 mb-8">
           <AnimatePresence>
             {poem.map((item, index) => (
               <motion.div
@@ -130,7 +130,7 @@ export default function Clippings() {
                     className="h-12 w-auto object-contain drop-shadow-sm filter sepia-[0.15] hover:sepia-0 transition-all duration-300 ease-out select-none"
                   />
                 ) : (
-                  <span className="font-mono text-lg text-zinc-800 dark:text-zinc-200 bg-white dark:bg-zinc-800 px-2 py-1 rounded shadow-sm border border-zinc-200 dark:border-zinc-700 select-none">
+                  <span className="inline-flex items-center font-mono text-lg text-zinc-800 dark:text-zinc-200 bg-white dark:bg-zinc-800 px-2 py-1 rounded shadow-sm border border-zinc-200 dark:border-zinc-700 select-none">
                     {item.content}
                   </span>
                 )}
@@ -167,7 +167,7 @@ export default function Clippings() {
               src: {sourceName}
             </h3>
             
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-4 pl-2">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-4 pl-2">
               <AnimatePresence>
                 {groupClips.map((clip) => (
                   <motion.div
