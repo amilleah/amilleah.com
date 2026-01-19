@@ -28,16 +28,16 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
           inspired by <a class="whitespace-nowrap hover:underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-500" href="https://nownownow.com"
             >nownownow.com<span class="hover:underline"></span></a>.
         <br />
-          you can find my weekly updates on <a class="whitespace-nowrap hover:underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-500" href="https://inprogress.works"
-          >inprogress.works<span class="hover:underline"></span></a>.
-        <br /> <br />
           gallery built with <a class="whitespace-nowrap hover:underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-500" href="https://github.com/evadecker/astro-photo-grid"
             >astro-photo-grid<span class="hover:underline"></span></a>.
-        <br />
         </p>
       </header>
       <div class="h-px w-16 bg-zinc-200"></div>
-      <ul class="flex flex-col gap-1.5 px-2 md:px-0">
+      <p class="text-zinc-500">
+          you can find weekly updates on <a class="whitespace-nowrap hover:underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-500" href="https://inprogress.works"
+          >inprogress.works<span class="hover:underline"></span></a>
+      <p/> 
+      <ul class="flex flex-col gap-1.5 md:px-0">
         {
           posts.map((post) => (
             <li>
@@ -54,6 +54,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
           ))
         }
       </ul>
+    <br />
     </section>
     <section class="justified-gallery" id="photoswipe">
       {
