@@ -1,0 +1,52 @@
+---
+interface Props {
+  title: string;
+  href: string;
+  linkText: string;
+}
+
+const { title, href, linkText } = Astro.props;
+---
+
+<article class="etc-item flex flex-col">
+  <div class="mt-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:gap-8">
+    
+    <div class="etc-visual sm:shrink-0 sm:self-start">
+      <slot name="visual" />
+    </div>
+
+    <div class="flex flex-col sm:self-start">
+      <p class="my-1">
+        {title} 
+        <a 
+          href={href}
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="text-sm font-mono text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors underline decoration-dotted"
+        >
+          {linkText}
+        </a>
+      </p>
+      
+      <div class="text-sm text-zinc-600 dark:text-zinc-400 max-w-[65ch]">
+        <slot />
+      </div>
+    </div>
+  </div>
+
+  <div class="separator mt-4 h-px w-full bg-zinc-200 dark:bg-zinc-800"></div>
+</article>
+
+<style>
+  .etc-visual {
+    width: 6rem;
+  }
+  @media (min-width: 640px) {
+    .etc-visual {
+      width: 6rem;
+    }
+  }
+  .etc-item:last-of-type .separator {
+    display: none;
+  }
+</style>

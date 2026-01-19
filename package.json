@@ -2,9 +2,13 @@
   "name": "miniblog",
   "type": "module",
   "version": "0.0.2",
+  "packageManager": "pnpm@9.0.0",
   "scripts": {
+    "scan:clippings": "tsx scan-clippings.ts",
+    "predev": "tsx scan-clippings.ts",
     "dev": "astro dev",
     "start": "astro dev",
+    "prebuild": "tsx scan-clippings.ts",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
@@ -14,14 +18,22 @@
   "dependencies": {
     "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.0.2",
+    "@astrojs/react": "^4.4.2",
     "@astrojs/rss": "^4.0.9",
     "@astrojs/sitemap": "^3.2.1",
     "@astrojs/tailwind": "^5.1.2",
     "@fancyapps/ui": "^6.1.7",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
     "ansi_up": "^6.0.6",
     "astro": "^5.1.0",
     "citation-js": "^0.7.22",
+    "clsx": "^2.1.1",
     "fancybox": "^3.0.1",
+    "motion": "^12.27.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "sharp": "^0.34.5",
     "smartypants": "^0.2.2",
     "tailwind-merge": "^2.5.4",
     "tailwindcss": "^3.4.14",
@@ -31,7 +43,8 @@
     "prettier": "^3.3.3",
     "prettier-plugin-astro": "^0.14.1",
     "prettier-plugin-astro-organize-imports": "^0.4.11",
-    "prettier-plugin-tailwindcss": "^0.6.8"
+    "prettier-plugin-tailwindcss": "^0.6.8",
+    "tsx": "^4.19.2"
   },
   "prettier": {
     "plugins": [

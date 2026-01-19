@@ -1,0 +1,20 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Clippings from "../components/lexicon/Clippings";
+---
+
+<Layout title="lexicon" description="a visual bag of words.">
+  <main class="space-y-6">
+    <header class="space-y-2">
+      <h1 class="text-lg font-medium tracking-tight">lexicon</h1>
+      <p class="text-sm text-zinc-400">
+        visual language stanzas.
+      </p>
+    </header>
+
+    <div class="h-px w-16 bg-zinc-200"></div>
+
+    <Clippings client:load />
+    
+  </main>
+</Layout>

@@ -1,7 +1,6 @@
 ---
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../../consts";
 import Layout from "../../layouts/Layout.astro";
 import { formatDate } from "../../lib/utils";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
@@ -12,7 +11,7 @@ const posts = collection.sort(
 );
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
-  "../../content/images/*.{jpg,jpeg,png,webp}",
+  "/public/images/now/*.{jpg,jpeg,png,webp}",
 );
 ---
 
@@ -35,7 +34,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
       <div class="h-px w-16 bg-zinc-200"></div>
       <p class="text-zinc-500">
           you can find weekly updates on <a class="whitespace-nowrap hover:underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-500" href="https://inprogress.works"
-          >inprogress.works<span class="hover:underline"></span></a>
+          >inprogress.works<span class="hover:underline"></span></a>!
       <p/> 
       <ul class="flex flex-col gap-1.5 md:px-0">
         {
