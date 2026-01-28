@@ -8,8 +8,8 @@ i'm sipping on iced tea as i build this website!
 
 # listening to
 - a Spotify daylist called: *silly instrumental saturday evening*
-- The Mountain Village (Calem Bowen)
-- Free Money (Calem Bowen)
+- The Mountain Village (Calum Bowen)
+- Free Money (Calum Bowen)
 - 2010 Toyota Corolla (2003 Toyota Corolla)
 - палка (POCKET061)
 - Oivomaitnt (koronba)
