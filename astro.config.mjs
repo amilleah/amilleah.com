@@ -21,4 +21,7 @@ export default defineConfig({
       },
     },
   },
+  redirects: {
+    '/cv': '/public/files/rodriguez_cv.pdf',
+  },
 });

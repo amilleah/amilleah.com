@@ -7,9 +7,7 @@ date: "Jan 28 2026"
 happy wednesday!
 
 i listen to music as i prepare for an interview this friday. \
-i am incredibly nervous but deeply looking forward to talk about research with new people.
-
-i feel ready..? only time will tell.
+i am incredibly nervous but deeply looking forward to talking about research with new people. i feel ready..? only time will tell.
 
 i remember to sip my tea. \
 my cat snores in his sleep.

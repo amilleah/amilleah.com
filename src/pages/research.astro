@@ -14,22 +14,29 @@ const { publicationsHtml, presentationsHtml } = getResearchHtml();
       </p>
     </header>
     <div class="h-px w-16 bg-zinc-200"></div>
-    <p class="text-zinc-500">
-      My work investigates the computations underlying language processing in biological and artificial systems.
-      I am specifically interested in how compositional meaning is constructed incrementally and how predictive mechanisms operate over the output of those computations.
-      I use human neural dynamics (MEG), behavioral measures (reading in RSVP and RPVP), and artificial language systems (LLMs) to address these questions.
-    </p>
-    <section class="space-y-2">
+
+    <div class="space-y-4 text-zinc-500 leading-relaxed">
+      <p>
+        My work investigates the computations underlying language processing in both biological and artificial systems. I focus on how compositional meaning is constructed incrementally, and on how predictive mechanisms operate over structured representations during comprehension. To address these questions, I draw on evidence from human neural dynamics, behavioral measures of reading, and artificial language models.
+      </p>
+    </div>
+
+    <section class="space-y-4">
       <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400">
         Publications
       </h2>
-      <div set:html={publicationsHtml}></div>
+      <div set:html={publicationsHtml} class="prose prose-sm prose-zinc"></div>
     </section>
-    <section class="space-y-2">
+
+    <section class="space-y-4">
       <h2 class="text-sm font-medium uppercase tracking-wide text-zinc-400">
         Presentations
       </h2>
-      <div set:html={presentationsHtml}></div>
+      <div set:html={presentationsHtml} class="prose prose-sm prose-zinc"></div>
     </section>
+
+    <div class="flex flex-wrap gap-4 text-sm font-medium uppercase tracking-wide text-zinc-400">
+      <a href="/public/files/rodriguez_cv.pdf" class="hover:text-zinc-800 transition-colors border-b border-zinc-200 pb-0.5">View CV (PDF)</a>
+    </div>
   </main>
 </Layout>
