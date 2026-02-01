@@ -133,8 +133,8 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
 
   @media (max-width: 1200px) {
     .justified-gallery a {
-      flex-basis: calc((100% - var(--space)));
-      max-width: calc((100% - var(--space)));
+      flex-basis: calc((100% - var(--space)) / 2);
+      max-width: calc((100% - var(--space)) / 2);
     }
   }
 
