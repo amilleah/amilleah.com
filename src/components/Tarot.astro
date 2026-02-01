@@ -62,10 +62,10 @@
         localStorage.setItem(TODAY_KEY, JSON.stringify(card));
       }
 
-      const res = await fetch(`/ansi/tarot/${card.file}`);
+      const res = await fetch(`/images/tarot/${card.file}`);
 
       if (!res.ok) {
-        throw new Error(`file not found: ansi/tarot/${card.file} (${res.status})`);
+        throw new Error(`file not found: /images/tarot/${card.file} (${res.status})`);
       }
 
       const text = await res.text();

@@ -61,6 +61,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
             <a
               style={`--width: ${imageData.width}; --height: ${imageData.height};`}
               href={imageData.src}
+              target="_blank"
               data-fancybox="gallery"
             >
               <Image
@@ -79,7 +80,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
 </Layout>
 
 <script>
-  import { Fancybox } from "@fancyapps/ui/dist/fancybox";
+  import { Fancybox } from "@fancyapps/ui/dist/fancybox/";
 
   Fancybox.bind("[data-fancybox]", {
     theme: "auto",
@@ -90,7 +91,7 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
       "--f-toolbar-padding": "16px",
     },
     Carousel: {
-      Arrows: true,
+      Arrows: false,
       Toolbar: {
         display: {
           left: [],
@@ -98,49 +99,57 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
           right: ["close"],
         },
       },
-      transition: "fade",
+      transition: "slide",
     },
   });
 </script>
 
 <style>
   .justified-gallery {
-    --padding: max(1vw, 6px);
-    --space: max(1vw, 3px);
+    --padding: max(1.5vw, 8px);
+    --space: max(1.5vw, 8px);
+    --scale: 0.5;
+    --min-height-base: clamp(160px, 16vw, 320px);
+    --min-height: calc(var(--min-height-base) * var(--scale));
 
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    column-gap: var(--space);
-    column-count: 3;
-  }
-
-  @media (max-width: 1100px) {
-    .justified-gallery {
-      column-count: 2;
-    }
-  }
-
-  @media (max-width: 700px) {
-    .justified-gallery {
-      column-count: 1;
-    }
+    padding: var(--padding);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space);
   }
 
   .justified-gallery a {
-    display: inline-block;
-    width: 100%;
-    margin: 0 0 var(--space);
+    flex-grow: calc(var(--width) * (100000 / var(--height)));
+    flex-basis: min(
+      calc(var(--min-height) * (var(--width) / var(--height))),
+      100%
+    );
+    max-width: 100%;
+    aspect-ratio: var(--width) / var(--height);
     overflow: hidden;
     opacity: 1;
-    break-inside: avoid;
     transition: all 0.05s ease-in-out;
+  }
+
+  @media (max-width: 1200px) {
+    .justified-gallery a {
+      flex-basis: calc((100% - var(--space)));
+      max-width: calc((100% - var(--space)));
+    }
+  }
+
+  @media (max-width: 600px) {
+    .justified-gallery a {
+      flex-basis: 100%;
+      max-width: 100%;
+    }
   }
 
   .justified-gallery a img {
     display: block;
+    object-fit: cover;
+    height: 100%;
     width: 100%;
-    height: auto;
   }
 
   .justified-gallery a:focus-visible {
@@ -158,7 +167,8 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
   }
 
   .justified-gallery::after {
-    content: "";
+    content: " ";
+    flex-grow: 1000000000;
   }
 
   :global(.fancybox__thumbs) {
