@@ -1,0 +1,13 @@
+---
+const { tag, href, dataTag } = Astro.props;
+const classes =
+  "rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] text-zinc-400 no-underline hover:no-underline";
+---
+
+{href ? (
+  <a class={classes} href={href} data-tag={dataTag}>
+    {tag}
+  </a>
+) : (
+  <span class={classes}>{tag}</span>
+)}

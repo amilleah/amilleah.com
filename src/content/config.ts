@@ -7,6 +7,7 @@ const now = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     image: z.string().default("/static/blog-placeholder.png"),
+    tags: z.union([z.string(), z.array(z.string())]).optional(),
   }),
 });
 

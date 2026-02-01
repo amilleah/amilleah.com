@@ -3,12 +3,16 @@ import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import { formatDate } from "../../lib/utils";
+import TagPill from "../../components/TagPill.astro";
 import "@fancyapps/ui/dist/fancybox/fancybox.css";
 
 const collection = await getCollection("now");
 const posts = collection.sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
+
+const normalizeTags = (tags: unknown) =>
+  Array.isArray(tags) ? tags : tags ? [tags] : [];
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/public/images/now/*.{jpg,jpeg,png,webp}",
@@ -34,21 +38,38 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
           you can find weekly updates on <a class="whitespace-nowrap hover:underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-500" href="https://inprogress.works"
           >inprogress.works<span class="hover:underline"></span></a>!
       <p/> 
+      <p class="tag-filter-indicator text-sm text-zinc-400 hidden"></p>
       <ul class="flex flex-col gap-1.5 md:px-0">
         {
-          posts.map((post) => (
-            <li>
-              <a
-                href={`/now/${post.slug}`}
-                class="group grid gap-1"
-              >
-                <span class="text-xs text-zinc-500">
-                  {formatDate(post.data.date)}
-                </span>
-                <span class="group-hover:underline">{post.data.title}</span>
-              </a>
-            </li>
-          ))
+          posts.map((post) => {
+            const tags = normalizeTags(post.data.tags);
+            return (
+              <li class="now-post" data-tags={tags.join(",")}>
+                <a
+                  href={`/now/${post.slug}`}
+                  class="group grid gap-1"
+                >
+                  <span class="text-xs text-zinc-500">
+                    {formatDate(post.data.date)}
+                  </span>
+                  <span class="group-hover:underline">{post.data.title}</span>
+                  {
+                    tags.length ? (
+                      <span class="flex flex-wrap gap-1">
+                        {tags.map((tag) => (
+                          <TagPill
+                            tag={tag}
+                            href={`/now?tag=${encodeURIComponent(tag)}`}
+                            dataTag={tag}
+                          />
+                        ))}
+                      </span>
+                    ) : null
+                  }
+                </a>
+              </li>
+            );
+          })
         }
       </ul>
     <br />
@@ -75,6 +96,15 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
           );
         })
       }
+      <footer class="grid-attribution text-xs text-zinc-400">
+        photo grid based on
+        <a
+          class="hover:underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-500"
+          href="https://github.com/evadecker/astro-photo-grid"
+        >
+          astro-photo-grid.
+        </a>
+      </footer>
     </section>
   </main>
 </Layout>
@@ -104,6 +134,57 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
   });
 </script>
 
+<script>
+  const applyTagFilter = () => {
+    const params = new URLSearchParams(window.location.search);
+    const activeTag = params.get("tag");
+    const indicator = document.querySelector(".tag-filter-indicator");
+
+    document.querySelectorAll(".now-post").forEach((item) => {
+      item.classList.remove("hidden");
+    });
+
+    document.querySelectorAll("[data-tag]").forEach((tagLink) => {
+      tagLink.classList.remove("bg-zinc-100", "text-zinc-600");
+    });
+
+    if (!activeTag) {
+      if (indicator) {
+        indicator.classList.add("hidden");
+        indicator.textContent = "";
+      }
+      return;
+    }
+
+    const normalizedTag = activeTag.toLowerCase();
+
+    if (indicator) {
+      indicator.innerHTML = `filter: <span class="rounded-full border border-zinc-200 px-2 py-0.5 text-[11px] text-zinc-400 inline-flex items-center gap-1"><span>${activeTag}</span><a class="text-zinc-500 hover:text-zinc-700 no-underline hover:no-underline" href="/now" aria-label="Clear tag filter">×</a></span>`;
+      indicator.classList.remove("hidden");
+    }
+
+    document.querySelectorAll(".now-post[data-tags]").forEach((item) => {
+      const tags = (item.getAttribute("data-tags") || "")
+        .split(",")
+        .map((tag) => tag.trim().toLowerCase())
+        .filter(Boolean);
+      const isMatch = tags.includes(normalizedTag);
+      item.classList.toggle("hidden", !isMatch);
+    });
+
+    document.querySelectorAll("[data-tag]").forEach((tagLink) => {
+      const tag = (tagLink.getAttribute("data-tag") || "").toLowerCase();
+      if (tag === normalizedTag) {
+        tagLink.classList.add("bg-zinc-100", "text-zinc-600");
+      }
+    });
+  };
+
+  applyTagFilter();
+  document.addEventListener("astro:page-load", applyTagFilter);
+  document.addEventListener("DOMContentLoaded", applyTagFilter);
+</script>
+
 <style>
   .justified-gallery {
     --padding: max(1.5vw, 8px);
@@ -129,6 +210,17 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
     overflow: hidden;
     opacity: 1;
     transition: all 0.05s ease-in-out;
+  }
+
+  .justified-gallery .grid-attribution {
+    flex: 0 0 auto;
+    align-self: flex-start;
+    padding-top: 0;
+    max-width: 100%;
+  }
+
+  .now-post.hidden {
+    display: none;
   }
 
   @media (max-width: 1200px) {
