@@ -44,10 +44,11 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
           posts.map((post) => {
             const tags = normalizeTags(post.data.tags);
             return (
-              <li class="now-post" data-tags={tags.join(",")}>
+              <li class="now-post" data-tags={tags.join(",")} data-post-slug={post.slug}>
                 <a
-                  href={`/now/${post.slug}`}
-                  class="group grid gap-1"
+                  href={`/now?post=${encodeURIComponent(post.slug)}`}
+                  class="now-post-link group grid gap-1"
+                  data-post-link={post.slug}
                 >
                   <span class="text-xs text-zinc-500">
                     {formatDate(post.data.date)}
@@ -74,39 +75,71 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
       </ul>
     <br />
     </section>
-    <section class="justified-gallery" id="photoswipe">
-      {
-        Object.entries(images).map(async ([_path, image], index) => {
-          const { default: imageData } = await image();
-          return (
-            <a
-              style={`--width: ${imageData.width}; --height: ${imageData.height};`}
-              href={imageData.src}
-              target="_blank"
-              data-fancybox="gallery"
-            >
-              <Image
-                format="webp"
-                src={imageData}
-                alt=""
-                height={400}
-                loading={index < 20 ? "eager" : "lazy"}
-              />
-            </a>
-          );
-        })
-      }
-      <footer class="grid-attribution text-xs text-zinc-400">
-        photo grid based on
+    <section id="now-right-panel">
+      <section class="justified-gallery" id="photoswipe">
+        {
+          Object.entries(images).map(async ([_path, image], index) => {
+            const { default: imageData } = await image();
+            return (
+              <a
+                style={`--width: ${imageData.width}; --height: ${imageData.height};`}
+                href={imageData.src}
+                data-fancybox="gallery"
+              >
+                <Image
+                  format="webp"
+                  src={imageData}
+                  alt=""
+                  height={400}
+                  loading={index < 20 ? "eager" : "lazy"}
+                />
+              </a>
+            );
+          })
+        }
+        <footer class="grid-attribution text-xs text-zinc-400">
+          photo grid based on
+          <a
+            class="hover:underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-500"
+            href="https://github.com/evadecker/astro-photo-grid"
+          >
+            astro-photo-grid.
+          </a>
+        </footer>
+      </section>
+      <article id="selected-post-panel" class="space-y-4 px-1 py-2" style="display: none;">
         <a
-          class="hover:underline underline-offset-2 decoration-zinc-300 hover:decoration-zinc-500"
-          href="https://github.com/evadecker/astro-photo-grid"
+          id="selected-post-back"
+          href="/now"
+          class="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-zinc-700 hover:underline underline-offset-2"
+          aria-label="Back to photos"
         >
-          astro-photo-grid.
+          <span aria-hidden="true">←</span>
+          <span>photos</span>
         </a>
-      </footer>
+        <div id="selected-post-content"></div>
+      </article>
     </section>
   </main>
+
+  <div class="hidden" aria-hidden="true">
+    {
+      posts.map(async (post) => {
+        const { Content } = await post.render();
+        return (
+          <template data-post-template={post.slug}>
+            <article class="space-y-4">
+              <header class="space-y-2">
+                <h2 class="text-lg font-medium tracking-tight">{post.data.title}</h2>
+                <p class="text-sm text-zinc-500">{formatDate(post.data.date)}</p>
+              </header>
+              <Content />
+            </article>
+          </template>
+        );
+      })
+    }
+  </div>
 </Layout>
 
 <script>
@@ -132,6 +165,107 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
       transition: "slide",
     },
   });
+</script>
+
+<script>
+  const photoPanel = document.getElementById("photoswipe");
+  const postPanel = document.getElementById("selected-post-panel");
+  const postContent = document.getElementById("selected-post-content");
+  const backLink = document.getElementById("selected-post-back");
+
+  const showPhotos = () => {
+    if (photoPanel) {
+      photoPanel.style.display = "";
+    }
+    if (postPanel) {
+      postPanel.style.display = "none";
+    }
+  };
+
+  const showPost = () => {
+    if (photoPanel) {
+      photoPanel.style.display = "none";
+    }
+    if (postPanel) {
+      postPanel.style.display = "";
+    }
+  };
+
+  const setPostStateFromParams = () => {
+    const params = new URLSearchParams(window.location.search);
+    const activeSlug = params.get("post");
+    const template = activeSlug
+      ? document.querySelector(
+          `template[data-post-template="${CSS.escape(activeSlug)}"]`,
+        )
+      : null;
+
+    document.querySelectorAll(".now-post").forEach((item) => {
+      const isActive = item.getAttribute("data-post-slug") === activeSlug;
+      item.classList.toggle("active", isActive);
+    });
+
+    if (!activeSlug || !template || !photoPanel || !postPanel || !postContent) {
+      if (photoPanel && postPanel && postContent) {
+        postContent.innerHTML = "";
+        showPhotos();
+      }
+      return;
+    }
+
+    postContent.innerHTML = template.innerHTML;
+    showPost();
+  };
+
+  const pushPostParam = (slug: string) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("post", slug);
+    history.pushState({}, "", `${url.pathname}?${url.searchParams.toString()}`);
+    setPostStateFromParams();
+  };
+
+  const clearPostParam = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("post");
+    const query = url.searchParams.toString();
+    history.pushState({}, "", query ? `${url.pathname}?${query}` : url.pathname);
+    setPostStateFromParams();
+  };
+
+  document.querySelectorAll("[data-post-link]").forEach((link) => {
+    link.addEventListener("click", (event: Event) => {
+      if (!(event instanceof MouseEvent)) {
+        return;
+      }
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      ) {
+        return;
+      }
+
+      event.preventDefault();
+      const slug = link.getAttribute("data-post-link");
+      if (slug) {
+        pushPostParam(slug);
+      }
+    });
+  });
+
+  if (backLink) {
+    backLink.addEventListener("click", (event) => {
+      event.preventDefault();
+      clearPostParam();
+    });
+  }
+
+  setPostStateFromParams();
+  document.addEventListener("astro:page-load", setPostStateFromParams);
+  window.addEventListener("popstate", setPostStateFromParams);
 </script>
 
 <script>
@@ -187,13 +321,11 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
 
 <style>
   .justified-gallery {
-    --padding: max(1.5vw, 8px);
     --space: max(1.5vw, 8px);
     --scale: 0.5;
     --min-height-base: clamp(160px, 16vw, 320px);
     --min-height: calc(var(--min-height-base) * var(--scale));
 
-    padding: var(--padding);
     display: flex;
     flex-wrap: wrap;
     gap: var(--space);
@@ -223,10 +355,29 @@ const images = import.meta.glob<{ default: ImageMetadata }>(
     display: none;
   }
 
+  .now-post.active > a span:nth-child(2) {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
   @media (max-width: 1200px) {
     .justified-gallery a {
       flex-basis: calc((100% - var(--space)) / 2);
       max-width: calc((100% - var(--space)) / 2);
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .justified-gallery {
+      --scale: 0.42;
+      --space: max(1vw, 7px);
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .justified-gallery {
+      --scale: 0.36;
+      --space: max(1vw, 6px);
     }
   }
 
