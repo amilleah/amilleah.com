@@ -6,6 +6,6 @@ export const SITE_TITLE = "amilleah";
 export const SITE_DESCRIPTION =
   "amilleah is a cognitive scientist and linguist. they like programming and human languages, tea, and minecraft. they have two cats.";
 
-export const EMAIL = "amilleahrodriguez@gmail.com";
+export const EMAIL = "hey@amilleah.com";
 export const GITHUB = "https://github.com/amilleah"
 export const SUBSTACK = "https://amilleah.substack.com"
