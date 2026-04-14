@@ -1,0 +1,14 @@
+.*
+index.html
+package.json
+pnpm-lock.yaml
+node_modules
+LICENSE
+
+src/
+views/
+assets/
+
+*.bib
+links.md
+favicon.svg

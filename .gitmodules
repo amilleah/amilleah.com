@@ -1,0 +1,7 @@
+[submodule "projects/style"]
+	path = projects/style
+	url = https://github.com/amilleah/style.git
+[submodule "projects/tarot"]
+	path = projects/tarot
+	url = https://github.com/amilleah/tarot.git
+	branch = web

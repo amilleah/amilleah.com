@@ -1,0 +1,14 @@
+.env
+*~
+*.log
+*.swp
+node_modules/
+
+.vscode
+
+# Swap
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+.DS_Store
+.pnpm-store/
+assets/images/clippings/

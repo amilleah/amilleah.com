@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>amilleah/research/</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
+  <style>
+    :root {
+      --bg: oklch(99.4% 0 0);
+      --text: oklch(35.02% 0.005 236.66);
+      --muted: oklch(63.12% 0.004 219.55);
+      --line: oklch(92.04% 0.002 197.12);
+      --accent: #df4a15;
+      --link-hover: oklch(14.38% 0.007 256.88);
+      --sidebar-w: 16rem;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: oklch(25.11% 0.006 258.36);
+        --text: oklch(91.87% 0.003 264.54);
+        --muted: oklch(69.17% 0.004 247.88);
+        --line: oklch(43.87% 0.005 271.3);
+        --link-hover: oklch(91.87% 0.003 264.54);
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); }
+
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 160ms ease;
+    }
+    a:hover { color: var(--link-hover); }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      padding: 3rem 1.5rem 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      display: block;
+      margin-bottom: 0.75rem;
+    }
+    .sidebar-logo__img {
+      width: 32px;
+      height: 32px;
+      display: block;
+    }
+
+    .sidebar-name {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.1rem;
+      letter-spacing: 0.01em;
+    }
+    .sidebar-name:hover { color: var(--accent); }
+
+    .ipa {
+      margin: 0 0 2rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      letter-spacing: 0.03em;
+    }
+
+    .tree {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 0.78rem;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+      line-height: 1.5;
+    }
+    .tree li { margin: 0; white-space: pre; }
+    .tree a { color: var(--muted); }
+    .tree a:hover { color: var(--link-hover); }
+    .tree a.tree-active { color: var(--text); }
+    .tree a.tree-active:hover { color: var(--accent); }
+    .tree-pre { color: var(--line); }
+    .tree-file { color: var(--muted); }
+
+    .sidebar-links {
+      margin-top: auto;
+      padding-top: 2rem;
+      font-size: 0.78rem;
+      line-height: 1.9;
+    }
+    .sidebar-links p { margin: 0; }
+    .sidebar-links h2 { display: none; }
+    .sidebar-links a { color: var(--muted); }
+    .sidebar-links a:hover { color: var(--link-hover); }
+
+    .main {
+      flex: 1;
+      padding: 3rem 3rem 5rem 3rem;
+      max-width: 42rem;
+    }
+    .main--grid {
+      max-width: min(72rem, calc(100vw - var(--sidebar-w) - 6rem));
+    }
+
+    .item { margin: 0 0 2rem; }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+      gap: 1rem;
+      align-items: start;
+    }
+    .photo-card {
+      margin: 0;
+    }
+    .photo-card .item-label {
+      margin-bottom: 0.5rem;
+    }
+    .photo-card a {
+      display: block;
+    }
+    .photo-card img {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      background: var(--line);
+    }
+
+    .item-label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .item-label a { color: var(--muted); }
+    .item-label a:hover { color: var(--link-hover); }
+
+    img { max-width: 100%; height: auto; display: block; }
+    video { max-width: 100%; height: auto; }
+    audio { max-width: 100%; height: 3em; }
+    .image-preview {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+      background: rgba(0, 0, 0, 0.8);
+      cursor: zoom-out;
+    }
+    .image-preview[hidden] {
+      display: none;
+    }
+    .image-preview__img {
+      width: auto;
+      max-width: min(92vw, 78rem);
+      max-height: 90vh;
+      box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.45);
+      cursor: auto;
+    }
+    .image-preview__nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.5);
+      font-size: 2rem;
+      line-height: 1;
+      padding: 1rem;
+      cursor: pointer;
+      z-index: 1001;
+      transition: color 120ms ease;
+    }
+    .image-preview__nav:hover { color: rgba(255,255,255,0.9); }
+    .image-preview__prev { left: 0.5rem; }
+    .image-preview__next { right: 0.5rem; }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin: 0 0 0.25rem;
+    }
+    p, ul, ol, pre { margin: 0 0 1rem; }
+    ul, ol { padding-left: 1.2rem; }
+    pre { font-family: inherit; white-space: pre-wrap; }
+    hr { border: none; border-top: 1px solid var(--line); margin: 2rem 0; }
+
+    .md h1, .md h2, .md h3, .md h4, .md h5, .md h6 { margin-top: 1.5rem; }
+    .md p, .md pre { margin-top: 0.25rem; }
+    .research-list {
+      list-style: none;
+      margin: 0.35rem 0 1.75rem;
+      padding: 0;
+    }
+    .research-row {
+      display: grid;
+      grid-template-columns: 5rem 1fr;
+      border-bottom: 1px solid var(--line);
+      padding: 0.5rem 0;
+    }
+    .research-row:last-child {
+      border-bottom: none;
+    }
+    .research-meta {
+      color: var(--muted);
+      font-size: 0.82rem;
+      white-space: nowrap;
+      padding-top: 0.1rem;
+    }
+    .research-main {
+      min-width: 0;
+    }
+    .research-title {
+      margin: 0;
+    }
+    .research-authors,
+    .research-venue {
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+    .research-authors { margin-top: 0.05rem; }
+    .research-venue { margin-top: 0.05rem; }
+    .item-subtitle {
+      margin: 0 0 1.1rem;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+    .item-subtitle a { color: var(--muted); }
+    .item-subtitle a:hover { color: var(--link-hover); }
+
+    .who-am-i {
+      display: inline-block;
+      position: relative;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.85em;
+      color: var(--text);
+      background: var(--line);
+      border-radius: 0.2em;
+      padding: 0.1em 0.4em;
+    }
+    .inline-var {
+      display: inline-block;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+      font-size: 0.82em;
+      color: var(--muted);
+      letter-spacing: 0;
+      margin-right: 0.6rem;
+    }
+    .inline-var__key {
+      display: none;
+    }
+    .inline-var__value {
+      opacity: 0.9;
+    }
+    .who-am-i-item {
+      display: none;
+      opacity: 0;
+      transition: opacity 400ms ease;
+    }
+    .who-am-i-item--active {
+      display: inline;
+      opacity: 1;
+    }
+
+    @media (max-width: 640px) {
+      .layout { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        padding: 2rem 1.25rem 1.5rem;
+      }
+      .main,
+      .main--grid { padding: 2rem 1.25rem 4rem; max-width: 100%; }
+      .research-row { grid-template-columns: 4.5rem 1fr; }
+      .photo-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+
+    <aside class="sidebar">
+      <a class="sidebar-logo" href="/"><img src="/favicon.svg" alt="amilleah" class="sidebar-logo__img"></a>
+      <a class="sidebar-name" href="/">amilleah</a>
+      <p class="ipa">/əˈmɪliə/</p>
+      
+      <ul class="tree">
+        <li><span class="tree-pre"></span><a href="/">amilleah.com/</a></li>
+        <li><span class="tree-pre">├── </span><a href="/now/">now/ (4)</a></li>
+        <li><span class="tree-pre">├── </span><a href="/photos/">photos/ (64)</a></li>
+        <li><span class="tree-pre">├── </span><a href="/projects/">projects/ (3)</a></li>
+        <li><span class="tree-pre">│   ├── </span><a href="/projects/color/">color.md</a></li>
+        <li><span class="tree-pre">│   ├── </span><a href="/projects/style/">style.md</a></li>
+        <li><span class="tree-pre">│   └── </span><a href="/projects/tarot/">tarot.md</a></li>
+        <li><span class="tree-pre">├── </span><a href="/research/" class="tree-active">research/ (1)</a></li>
+        <li><span class="tree-pre">│   └── </span><a href="/research/rodriguez_cv.pdf" target="_blank" rel="noopener noreferrer">rodriguez_cv.pdf</a></li>
+        <li><span class="tree-pre">├── </span><a href="/start.sh">start.sh</a></li>
+        <li><span class="tree-pre">└── </span><a href="/watch.sh">watch.sh</a></li>
+      </ul>
+      <div class="sidebar-links"><h2>links</h2>
+<p>Are.na <a href="https://are.na/amilleah">/amilleah</a> <br>GitHub <a href="https://github.com/amilleah">/amilleah</a> <br>Substack <a href="https://amilleah.substack.com/">@amilleah</a> <br>inprogress.works <a href="https://inprogress.works/archive/amilleah">@amilleah</a></p>
+<h2>contact me</h2>
+<p>(research) <a href="mailto:amilleah@umich.edu">amilleah@umich.edu</a> <br>(personal) <a href="mailto:hey@amilleah.com">hey@amilleah.com</a></p>
+</div>
+    </aside>
+
+    <main class="main">
+        <div class="item" id="research">
+          <div class="md"><!-- generated by `pnpm run research` from `research/ref.bib`; edit the bibliography instead -->
+
+<h2>publications</h2>
+<ul class="research-list">
+<li class="research-row">
+  <div class="research-meta">in prep</div>
+  <div class="research-main">
+    <div class="research-title">Backward surprisal in serial and parallel reading</div>
+    <div class="research-authors"><strong>Rodriguez, A.</strong>, Flower, N., &amp; Pylkkänen, L.</div>
+  </div>
+</li>
+<li class="research-row">
+  <div class="research-meta">in prep</div>
+  <div class="research-main">
+    <div class="research-title"><a href="https://doi.org/10.1101/2022.12.11.519989">Non-local conceptual combination</a></div>
+    <div class="research-authors">Parrish, A., <strong>Rodriguez, A.</strong>, &amp; Pylkkänen, L.</div>
+  </div>
+</li>
+<li class="research-row">
+  <div class="research-meta">2024</div>
+  <div class="research-main">
+    <div class="research-title"><a href="https://aclanthology.org/2024.lrec-main.472/">Do Neural Language Models Compose Concepts the Way Humans Can?</a></div>
+    <div class="research-authors"><strong>Rodriguez, A.</strong>, Wang, S., &amp; Pylkkänen, L.</div>
+    <div class="research-venue">2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024), 2024. 5309-5314</div>
+  </div>
+</li>
+</ul>
+
+<h2>presentations</h2>
+<ul class="research-list">
+<li class="research-row">
+  <div class="research-meta">2025</div>
+  <div class="research-main">
+    <div class="research-title"><a href="https://2025.neurolang.org/presentation/?id=644">An MEG investigation of adjective order preferences as a syntactic constraint in English</a></div>
+    <div class="research-authors">Li, B., <strong>Rodriguez, A.</strong>, &amp; Pylkkänen, L.</div>
+    <div class="research-venue">17th Annual Meeting of the Society for the Neurobiology of Language. Washington, DC, United States.</div>
+  </div>
+</li>
+<li class="research-row">
+  <div class="research-meta">2025</div>
+  <div class="research-main">
+    <div class="research-title"><a href="https://2025.neurolang.org/presentation/?id=647">Backward surprisal in serial and parallel reading</a></div>
+    <div class="research-authors"><strong>Rodriguez, A.</strong>, Flower, N., &amp; Pylkkänen, L.</div>
+    <div class="research-venue">17th Annual Meeting of the Society for the Neurobiology of Language. Washington, DC, United States.</div>
+  </div>
+</li>
+<li class="research-row">
+  <div class="research-meta">2025</div>
+  <div class="research-main">
+    <div class="research-title"><a href="https://2025.neurolang.org/presentation/?id=643">Structural priming in comprehension with RPVP</a></div>
+    <div class="research-authors">Cataldo, J., <strong>Rodriguez, A.</strong>, &amp; Pylkkänen, L.</div>
+    <div class="research-venue">17th Annual Meeting of the Society for the Neurobiology of Language. Washington, DC, United States.</div>
+  </div>
+</li>
+<li class="research-row">
+  <div class="research-meta">2024</div>
+  <div class="research-main">
+    <div class="research-title">Backward surprisal can reverse effects of forward surprisal</div>
+    <div class="research-authors"><strong>Rodriguez, A.</strong>, Flower, N., &amp; Pylkkänen, L.</div>
+    <div class="research-venue">2nd Annual Minds, Brains, Machines Poster Symposium. New York University, New York, NY, USA.</div>
+  </div>
+</li>
+<li class="research-row">
+  <div class="research-meta">2024</div>
+  <div class="research-main">
+    <div class="research-title">Do Neural Language Models Compose Concepts the Way Humans Can?</div>
+    <div class="research-authors"><strong>Rodriguez, A.</strong>, Wang, S., &amp; Pylkkänen, L.</div>
+    <div class="research-venue">2024 Joint International Conference on Computational Linguistics, Language Resources and Evaluation (LREC-COLING 2024). Turin, Italy.</div>
+  </div>
+</li>
+<li class="research-row">
+  <div class="research-meta">2023</div>
+  <div class="research-main">
+    <div class="research-title">Non-local phrasal composition in large language models</div>
+    <div class="research-authors"><strong>Rodriguez, A.</strong>, &amp; Pylkkänen, L.</div>
+    <div class="research-venue">UC Berkeley&#39;s 7th Annual Society of Linguistics Undergraduate Students Symposium. Berkeley, CA, United States.</div>
+  </div>
+</li>
+<li class="research-row">
+  <div class="research-meta">2022</div>
+  <div class="research-main">
+    <div class="research-title">Conceptual combination in non-local dependencies</div>
+    <div class="research-authors">Parrish, A., <strong>Rodriguez, A.</strong>, &amp; Pylkkänen, L.</div>
+    <div class="research-venue">14th Annual Meeting of the Society for the Neurobiology of Language. Philadelphia, PA, United States.</div>
+  </div>
+</li>
+</ul>
+</div>
+        </div>
+    </main>
+
+  </div>
+  <div class="image-preview" data-image-preview hidden>
+    <button class="image-preview__nav image-preview__prev" data-image-preview-prev aria-label="Previous">←</button>
+    <img class="image-preview__img" data-image-preview-img alt="">
+    <button class="image-preview__nav image-preview__next" data-image-preview-next aria-label="Next">→</button>
+  </div>
+  <script>
+    const topNavFlag = 'amilleah:scroll-to-top-on-load'
+    if (sessionStorage.getItem(topNavFlag) === '1') {
+      sessionStorage.removeItem(topNavFlag)
+      window.scrollTo(0, 0)
+    }
+
+    const imagePreview = document.querySelector('[data-image-preview]')
+    const imagePreviewImg = imagePreview ? imagePreview.querySelector('[data-image-preview-img]') : null
+    let previewLinks = []
+    let previewIndex = -1
+
+    const closeImagePreview = () => {
+      if (!imagePreview || imagePreview.hidden) return
+      imagePreview.hidden = true
+      document.body.style.overflow = ''
+      if (imagePreviewImg) imagePreviewImg.removeAttribute('src')
+      previewIndex = -1
+    }
+    const showPreview = (index) => {
+      if (!imagePreview || !imagePreviewImg) return
+      if (index < 0 || index >= previewLinks.length) return
+      previewIndex = index
+      const link = previewLinks[index]
+      imagePreviewImg.src = link.href
+      imagePreviewImg.alt = link.querySelector('img')?.alt || ''
+      imagePreview.hidden = false
+      document.body.style.overflow = 'hidden'
+    }
+    if (imagePreview && imagePreviewImg) {
+      document.addEventListener('click', event => {
+        const previewLink = event.target.closest('a[data-image-preview-link]')
+        if (!previewLink) return
+        event.preventDefault()
+        previewLinks = Array.from(new Map(Array.from(document.querySelectorAll('a[data-image-preview-link]')).map(function(l) { return [l.href, l] })).values())
+        showPreview(previewLinks.findIndex(function(l) { return l.href === previewLink.href }))
+      })
+      imagePreview.addEventListener('click', event => {
+        if (event.target === imagePreview) closeImagePreview()
+      })
+      document.querySelector('[data-image-preview-prev]')?.addEventListener('click', (e) => {
+        e.stopPropagation()
+        showPreview((previewIndex - 1 + previewLinks.length) % previewLinks.length)
+      })
+      document.querySelector('[data-image-preview-next]')?.addEventListener('click', (e) => {
+        e.stopPropagation()
+        showPreview((previewIndex + 1) % previewLinks.length)
+      })
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') { closeImagePreview(); return }
+        if (imagePreview.hidden) return
+        if (event.key === 'ArrowLeft') { event.preventDefault(); showPreview((previewIndex - 1 + previewLinks.length) % previewLinks.length) }
+        if (event.key === 'ArrowRight') { event.preventDefault(); showPreview((previewIndex + 1) % previewLinks.length) }
+      })
+    }
+
+    document.addEventListener('click', event => {
+      if (event.defaultPrevented) return
+      const link = event.target.closest('a')
+      if (!link) return
+      if (link.target === '_blank') return
+
+      const url = new URL(link.href, window.location.href)
+      if (url.origin !== window.location.origin) return
+      if (url.hash) return
+
+      sessionStorage.setItem(topNavFlag, '1')
+    })
+
+    const whoAmIEl = document.querySelector('.who-am-i-rotator')
+    if (whoAmIEl) {
+      const items = Array.from(whoAmIEl.querySelectorAll('.who-am-i-item'))
+      let current = 0
+      setInterval(() => {
+        items[current].classList.remove('who-am-i-item--active')
+        current = (current + 1) % items.length
+        items[current].classList.add('who-am-i-item--active')
+      }, 2500)
+    }
+  </script>
+</body>
+<!--
+kevin.garden (natural template) by Kevin Chen, 2023-26
+licensed under CC BY-NC 4.0: https://creativecommons.org/licenses/by-nc/4.0/
+please link to https://kevin.garden/ or https://file.gallery/, if possible.
+attribution only in the html source is sufficient. non-commercial use only :)
+-->
+</html>
