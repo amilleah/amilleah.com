@@ -5,7 +5,8 @@
   "scripts": {
     "cultivate": "node src/cultivate.js .",
     "research": "node src/research.js",
-    "build": "pnpm research && pnpm cultivate",
+    "thumbs": "node src/thumbs.js",
+    "build": "pnpm research && pnpm cultivate && pnpm thumbs",
     "watch": "bash watch.sh",
     "dev": "bash start.sh"
   },
@@ -16,6 +17,7 @@
     "marked": "^5.1.1",
     "micromatch": "^4.0.5",
     "parse-gitignore": "^2.0.0",
-    "pretty-bytes": "^6.1.0"
+    "pretty-bytes": "^6.1.0",
+    "sharp": "^0.34.5"
   }
 }
