@@ -125,6 +125,16 @@ async function cultivateFile(fileName, currPath) {
                 }</span>`;
                 mdBody = mdBody.replace('<!-- who-am-i -->', whoHtml);
             }
+            if (Array.isArray(frontmatter.sunday_entries) && frontmatter.sunday_entries.length) {
+                const sorted = [...frontmatter.sunday_entries].sort((a, b) => b.localeCompare(a));
+                const listHtml = sorted.map(entry => {
+                    const [date, ...rest] = entry.split(' ');
+                    const name = rest.join(' ');
+                    const inlineDate = `<span class="inline-var"><span class="inline-var__key">when::</span> <span class="inline-var__value">${date}</span></span>`;
+                    return `<p>${inlineDate} <a href="/projects/sunday/${name}/">${name}</a></p>`;
+                }).join('\n');
+                mdBody = mdBody.replace('<!-- sunday-list -->', listHtml);
+            }
             if (frontmatter.redirect) {
                 fileInfo.type = 'redirect';
                 fileInfo.redirect = frontmatter.redirect;

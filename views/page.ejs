@@ -121,13 +121,14 @@
     }
     .main--grid {
       max-width: min(72rem, calc(100vw - var(--sidebar-w) - 6rem));
+      padding-right: 1.5rem;
     }
 
     .item { margin: 0 0 2rem; }
     .photo-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-      gap: 1rem;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: clamp(0.45rem, 1.5vw, 1rem);
       align-items: start;
     }
     .photo-card {
@@ -256,6 +257,7 @@
     .who-am-i {
       display: inline-block;
       position: relative;
+      vertical-align: middle;
       font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
       font-size: 0.85em;
       color: var(--text);
@@ -296,12 +298,8 @@
         padding: 2rem 1.25rem 1.5rem;
       }
       .main,
-      .main--grid { padding: 2rem 1.25rem 4rem; max-width: 100%; }
+      .main--grid { padding: 2rem 1rem 4rem 1.25rem; max-width: 100%; }
       .research-row { grid-template-columns: 4.5rem 1fr; }
-      .photo-grid {
-        grid-template-columns: 1fr;
-        gap: 1.25rem;
-      }
     }
   </style>
 </head>
@@ -376,6 +374,9 @@
             var connector = last ? '└── ' : '├── ';
             var childPfx  = prefix + (last ? '    ' : '│   ');
             var display   = f.name;
+            if (f.type === 'directory' && f.name === 'archive/') {
+              display = f.name + ' (3)';
+            }
             if (f.type === 'directory' && f.name === 'photos/') {
               display = f.name + ' (' + countImagesInNode(f) + ')';
             }
@@ -398,7 +399,7 @@
                 : isPageAlias ? urlBase
                 : urlBase + fileSlug + '/'
               : f.type === 'redirect'
-                ? urlBase + fileSlug + '/'
+                ? f.redirect
               : urlBase + f.path;
             out.push({ pre: prefix + connector, name: display, href: href, newTab: isPdf, isRedirect: f.type === 'redirect', isPageAlias: isPageAlias, isDirectory: f.type === 'directory', pageSlug: fileSlug });
             if (f.type === 'directory' && f.children && f.children.length) {
@@ -409,7 +410,7 @@
         }
         var navFiles  = locals.rootFiles ? rootFiles : files;
         var treeItems = [{ pre: '', name: 'amilleah.com/', href: '/' }].concat(flattenTree(navFiles, '/', ''));
-        var currentHref = locals.urlBase ? urlBase : '/';
+var currentHref = locals.urlBase ? urlBase : '/';
         var currentDirName = currentHref === '/' ? '' : currentHref.split('/').filter(Boolean).slice(-1)[0] || '';
         var usePhotoGrid = currentDirName === 'photos';
         function isActive(item) {
@@ -420,7 +421,7 @@
       %>
       <ul class="tree">
         <%_ treeItems.forEach(function(item) { _%>
-        <li><span class="tree-pre"><%= item.pre %></span><%_ if (item.href) { _%><a href="<%= item.href %>"<%- isActive(item) ? ' class="tree-active"' : '' %><%- item.newTab ? ' target="_blank" rel="noopener noreferrer"' : '' %>><%= item.name %><%- item.isRedirect ? ' ↗' : '' %></a><%_ } else { _%><span class="tree-file"><%= item.name %></span><%_ } _%></li>
+        <li><span class="tree-pre"><%= item.pre %></span><%_ if (item.href) { _%><a href="<%= item.href %>"<%- isActive(item) ? ' class="tree-active"' : '' %><%- item.newTab ? ' target="_blank" rel="noopener noreferrer"' : '' %>><%= item.name %><%- '' %></a><%_ } else { _%><span class="tree-file"><%= item.name %></span><%_ } _%></li>
         <%_ }) _%>
       </ul>
       <%_ if (locals.sidebarLinksHtml && sidebarLinksHtml) { _%>

@@ -10,7 +10,11 @@ views/
 assets/
 
 *.bib
+*.sh
+
+thumbs/
+
 links.md
 favicon.svg
 
-*.sh
+garden/

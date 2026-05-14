@@ -1,3 +1,5 @@
-<link rel="stylesheet" href="style.css">
+## style
+
+<link rel="stylesheet" href="style.css?v=inline-code">
 <div id="app"></div>
-<script type="module" src="main.js?v=feature-descriptions-plural"></script>
+<script type="module" src="main.js?v=inline-code"></script>

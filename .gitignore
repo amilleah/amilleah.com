@@ -13,3 +13,4 @@ photos/thumbs/
 .DS_Store
 .pnpm-store/
 assets/images/clippings/
+**/index.html
