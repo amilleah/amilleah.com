@@ -1,5 +1,6 @@
 .env
 *~
+*.html
 *.log
 *.swp
 node_modules/
