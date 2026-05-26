@@ -366,7 +366,7 @@
           visibleNodes.forEach(function(f, i) {
             var isMdLike  = f.type === 'markdown' || f.type === 'redirect';
             var fileSlug  = isMdLike ? slug(f.name) : '';
-            var isRootHomeAlias = f.type === 'markdown' && urlBase === '/' && f.name === 'amilleah.md';
+            var isRootHomeAlias = f.type === 'markdown' && urlBase === '/' && f.name === 'README.md';
             var isDirAlias = f.type === 'markdown' && fileSlug === currentDirName;
             if (isRootHomeAlias || isDirAlias) return;
 
@@ -395,7 +395,7 @@
             var href      = f.type === 'directory'
               ? dirHref
               : f.type === 'markdown'
-                ? f.name === 'amilleah.md' ? '/'
+                ? f.name === 'README.md' ? '/'
                 : isPageAlias ? urlBase
                 : urlBase + fileSlug + '/'
               : f.type === 'redirect'

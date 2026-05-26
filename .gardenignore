@@ -12,8 +12,6 @@ assets/
 *.bib
 *.sh
 
-thumbs/
-
 links.md
 favicon.svg
 

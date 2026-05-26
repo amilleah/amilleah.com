@@ -3,7 +3,6 @@
 *.log
 *.swp
 node_modules/
-photos/thumbs/
 
 .vscode
 

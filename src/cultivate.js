@@ -210,7 +210,7 @@ async function render(rootPath, rootFiles, currDir = '', urlBase = '/', relative
 
     const title = relativePath !== '.' ? relativePath + '/' : '';
     const pageAlias = currDir === ''
-        ? allFiles.find(f => f.type === 'markdown' && f.name === 'amilleah.md')
+        ? allFiles.find(f => f.type === 'markdown' && f.name === 'README.md')
         : pageFileName ? allFiles.find(f => f.type === 'markdown' && f.name === pageFileName) : null;
     const contentFiles = pageAlias
         ? (currDir === '' ? allFiles.filter(f => f.type === 'markdown') : [pageAlias])
@@ -254,7 +254,7 @@ async function render(rootPath, rootFiles, currDir = '', urlBase = '/', relative
         const fileSlug = slug(file.name);
         if (!fileSlug) continue;
         if (file.name === pageFileName) continue;
-        if (currDir === '' && file.name === 'amilleah.md') continue;
+        if (currDir === '' && file.name === 'README.md') continue;
 
         const pageDir = path.join(currPath, fileSlug);
         const pageUrl = urlBase + fileSlug + '/';

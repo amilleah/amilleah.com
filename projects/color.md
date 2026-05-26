@@ -26,11 +26,8 @@ Also applied to Are.na:
 
 <script type="module">
 const channels = [
-{ slug: 'two-five-two-five-two-five', color: '#252525'},
-  { slug: '9ea1bd', color: '#9ea1bd' },
   { slug: 'ff0077', color: '#ff0077' },
   { slug: 'ecfa23', color: '#ecfa23' },
-  { slug: '8fe4f0', color: '#8fe4f0' },
   { slug: 'df4a16', color: '#df4a16' },
   { slug: '4f7a28', color: '#4f7a28'}
 ]

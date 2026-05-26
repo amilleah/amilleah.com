@@ -6,7 +6,7 @@ import parse from 'parse-gitignore';
 import micromatch from 'micromatch';
 import prettyBytes from 'pretty-bytes';
 
-const IMAGE_EXTENSIONS = new Set(['jpeg', 'jpg', 'png', 'webp', 'gif', 'apng', 'svg', 'bmp', 'ico']);
+const IMAGE_EXTENSIONS = new Set(['jpeg', 'jpg', 'png', 'gif', 'apng', 'svg', 'bmp', 'ico']);
 const VIDEO_EXTENSIONS = new Set(['mp4', 'webm']);
 const AUDIO_EXTENSIONS = new Set(['mp3', 'wav', 'ogg', 'm4a']);
 const NATURAL_COMPARE_OPTIONS = { numeric: true, sensitivity: 'base' };
