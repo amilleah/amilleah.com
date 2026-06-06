@@ -61,7 +61,7 @@ async function main() {
   for (const file of photoFiles) {
     const thumb = path.join(thumbDir, file);
     try { await fs.access(thumb); } catch {
-      execFileSync('magick', [
+      execFileSync('convert', [
         path.join(photoDir, file),
         '-resize', '384x384^', '-gravity', 'center', '-extent', '384x384',
         '-quality', '80', thumb,
