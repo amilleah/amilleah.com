@@ -31,7 +31,7 @@
         <div class="zine-frames">
           <% for (let i = 0; i < (item.frames || 0); i++) { %>
           <figure class="zine-frame">
-            <img src="/projects/<%= project.slug %>/<%= item.slug %>/frame-<%= i %>.png" alt="frame <%= i + 1 %>">
+            <img src="/projects/<%= project.slug %>/<%= item.slug %>/frame-<%= i %>.webp" alt="frame <%= i + 1 %>">
             <figcaption><%= i + 1 %></figcaption>
           </figure>
           <% } %>

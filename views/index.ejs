@@ -135,6 +135,7 @@
     }
 
     function loadPdf(link) {
+      document.dispatchEvent(new CustomEvent('panel:cleared'));
       right.innerHTML = `<embed src="${link.href}" type="application/pdf" style="width:100%;height:100%">`;
       current = 'cv';
       localStorage.setItem('panel', current);

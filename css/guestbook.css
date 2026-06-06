@@ -32,7 +32,7 @@
 .cover {
   position: absolute;
   inset: 0;
-  background: url('/guestbook/guestbook-cover.png') center / 100% 100% no-repeat;
+  background: url('/guestbook/guestbook-cover.webp') center / 100% 100% no-repeat;
   border-radius: 0 2px 2px 0;
   transform: translateZ(calc(var(--d) / 2 + 0.5px));
   box-shadow: 4px 6px 16px rgba(0,0,0,0.22);
@@ -42,7 +42,7 @@
 .back {
   position: absolute;
   inset: 0;
-  background: url('/guestbook/guestbook-back.png') center / 100% 100% no-repeat;
+  background: url('/guestbook/guestbook-back.webp') center / 100% 100% no-repeat;
   border-radius: 0 2px 2px 0;
   transform: rotateY(180deg) translateZ(calc(var(--d) / 2));
 }

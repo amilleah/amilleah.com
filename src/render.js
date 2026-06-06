@@ -87,7 +87,7 @@ async function main() {
       const frameDir = path.join(ROOT, 'projects', zinesData.slug, item.slug);
       try {
         const entries = await fs.readdir(frameDir);
-        item.frames = entries.filter(f => f.startsWith('frame-') && f.endsWith('.png')).length;
+        item.frames = entries.filter(f => f.startsWith('frame-') && f.endsWith('.webp')).length;
       } catch {
         item.frames = 0;
       }
