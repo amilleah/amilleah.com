@@ -16,6 +16,13 @@
   overflow: visible;
 }
 
+@media (max-width: 43em) {
+  .book-link {
+    left: unset;
+    right: 1.35em;
+  }
+}
+
 .book {
   --w: 4.2em;
   --h: 5.5em;

@@ -35,7 +35,7 @@
 
       <p class="section-gap">research</p>
       <hr>
-      <a class="row" href="/research/amilleahrodriguez_cv.pdf" data-pdf>
+      <a class="row" href="/research/amilleahrodriguez_cv.pdf" data-pdf target="_blank">
         <span class="row-name">curriculum vitae</span>
         <span class="row-desc"></span>
         <span class="row-date"><%= cvUpdated %></span>
@@ -142,6 +142,7 @@
     }
 
     document.querySelector('a[data-pdf]').addEventListener('click', e => {
+      if (window.matchMedia('(max-width: 43em)').matches) return;
       e.preventDefault();
       current === 'cv' ? clear() : loadPdf(e.currentTarget);
     });
