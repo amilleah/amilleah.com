@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= project.slug %> — amilleah.com</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <% if (project.css) { %>
+  <link rel="stylesheet" href="<%= project.css %>">
+  <% } %>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <% if (project.importmap) { %>
+  <script type="importmap"><%- JSON.stringify(project.importmap) %></script>
+  <% } %>
+</head>
+<body>
+  <main>
+    <p class="--muted"><%= project.date || '' %></p>
+    <h1><%= project.slug %></h1>
+    <% if (project.description) { %>
+    <p><%= project.description %></p>
+    <% } %>
+    <% if (project.url) { %>
+    <p><a href="<%= project.url %>" target="_blank"><%= project.url %></a></p>
+    <% } %>
+    <% if (project.items && project.items.length) { %>
+    <div class="zines-list">
+      <% project.items.forEach(function(item, idx) { %>
+      <div class="zine-row">
+        <p class="zine-title"><%= item.title %></p>
+        <div class="zine-frames">
+          <% for (let i = 0; i < (item.frames || 0); i++) { %>
+          <figure class="zine-frame">
+            <img src="/projects/<%= project.slug %>/<%= item.slug %>/frame-<%= i %>.png" alt="frame <%= i + 1 %>">
+            <figcaption><%= i + 1 %></figcaption>
+          </figure>
+          <% } %>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+    <% } %>
+    <% if (project.photos && project.photos.length) { %>
+    <div class="photos-grid">
+      <% project.photos.forEach(function(file) { %>
+      <img class="photo-thumb" src="/projects/<%= project.slug %>/thumbnail/<%= file %>" data-full="/projects/<%= project.slug %>/<%= file %>" alt="">
+      <% }); %>
+    </div>
+    <% } %>
+    <% if (project.script) { %>
+    <div id="app" data-base="/projects/<%= project.slug %>/"></div>
+    <% } %>
+  </main>
+  <% if (project.script) { %>
+  <script type="module" src="<%= project.script %>"></script>
+  <% } %>
+</body>
+</html>

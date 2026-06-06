@@ -1,0 +1,9 @@
+[build]
+  command = "node src/render.js"
+  publish = "."
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/feed.xml"
+  to = "/.netlify/functions/feed"
+  status = 200

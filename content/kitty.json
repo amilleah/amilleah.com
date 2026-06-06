@@ -1,0 +1,8 @@
+{
+  "slug": "kitty",
+  "date": "2025.12",
+  "description": "multitasking friend",
+  "url": "https://community.obsidian.md/plugins/kitty",
+  "css": "/projects/kitty/kitty.css",
+  "script": "/projects/kitty/kitty.js"
+}

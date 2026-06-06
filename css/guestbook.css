@@ -1,0 +1,187 @@
+/* book */
+
+@keyframes book-spin {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+}
+
+.book-link {
+  display: inline-block;
+  text-decoration: none;
+  position: fixed;
+  bottom: 1.35em;
+  left: 1.35em;
+  perspective: 600px;
+  perspective-origin: center center;
+  overflow: visible;
+}
+
+.book {
+  --w: 4.2em;
+  --h: 5.5em;
+  --d: 0.55em;
+
+  width: var(--w);
+  height: var(--h);
+  position: relative;
+  transform-style: preserve-3d;
+  animation: book-spin 20s linear infinite;
+}
+
+/* front cover: pushed forward by d/2 */
+.cover {
+  position: absolute;
+  inset: 0;
+  background: url('/guestbook/guestbook-cover.png') center / 100% 100% no-repeat;
+  border-radius: 0 2px 2px 0;
+  transform: translateZ(calc(var(--d) / 2 + 0.5px));
+  box-shadow: 4px 6px 16px rgba(0,0,0,0.22);
+}
+
+/* back cover: rotated 180deg, pushed to z = -d/2 */
+.back {
+  position: absolute;
+  inset: 0;
+  background: url('/guestbook/guestbook-back.png') center / 100% 100% no-repeat;
+  border-radius: 0 2px 2px 0;
+  transform: rotateY(180deg) translateZ(calc(var(--d) / 2));
+}
+
+/* spine: left edge, kraft tan, centered on z-axis */
+.spine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--d);
+  height: var(--h);
+  background: oklch(0.70 0.04 65);
+  transform: translateX(calc(-1 * var(--d) / 2)) rotateY(-90deg);
+}
+
+/* pages: right edge, off-white, centered on z-axis */
+.pages {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--d);
+  height: var(--h);
+  background: oklch(0.97 0 0);
+  transform: translateX(calc(var(--w) - var(--d) / 2)) rotateY(90deg);
+}
+
+/* top + bottom faces: close the book solid */
+.top-face,
+.bottom-face {
+  position: absolute;
+  left: 0;
+  width: var(--w);
+  height: var(--d);
+  background: oklch(0.70 0.04 65);
+}
+
+.top-face {
+  top: 0;
+  transform: translateY(calc(-1 * var(--d) / 2)) rotateX(90deg);
+}
+
+.bottom-face {
+  top: 0;
+  transform: translateY(calc(var(--h) - var(--d) / 2)) rotateX(-90deg);
+}
+
+/* guestbook form */
+
+.guestbook-form {
+  margin-bottom: 2em;
+}
+
+.form-row {
+  display: flex;
+  gap: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.guestbook-form input[type="text"],
+.guestbook-form textarea {
+  font-family: inherit;
+  font-size: 1em;
+  background: transparent;
+  color: inherit;
+  border: 1px solid var(--color-muted);
+  padding: 0.4em 0.6em;
+  outline: none;
+  width: 100%;
+}
+
+.guestbook-form input[type="text"]:focus,
+.guestbook-form textarea:focus {
+  border-color: var(--text);
+}
+
+.guestbook-form textarea {
+  resize: vertical;
+  display: block;
+}
+
+.word-count {
+  display: block;
+  text-align: right;
+  color: var(--color-muted);
+  font-size: 0.8em;
+  margin-top: 0.25em;
+}
+
+.word-count.over {
+  color: red;
+}
+
+.guestbook-form button {
+  font-family: inherit;
+  font-size: 1em;
+  background: transparent;
+  color: inherit;
+  border: 1px solid var(--color-muted);
+  padding: 0.4em 0.9em;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.guestbook-form button:hover {
+  border-color: var(--text);
+}
+
+/* guestbook page */
+
+.guestbook-header {
+  margin-bottom: 2em;
+}
+
+.guestbook-header h1 {
+  margin-bottom: 0.25em;
+}
+
+.guestbook-log {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.guestbook-log td {
+  padding: 0.1em 0.75em 0.1em 0;
+  vertical-align: top;
+  line-height: 1.4;
+}
+
+.entry-ts {
+  color: var(--color-muted);
+  white-space: nowrap;
+  font-size: 0.85em;
+}
+
+.entry-name {
+  white-space: nowrap;
+}
+
+.entry-msg {
+  width: 100%;
+}

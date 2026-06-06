@@ -1,7 +1,3 @@
-[submodule "projects/tarot"]
-	path = projects/tarot
-	url = git@github.com:amilleah/tarot.git
-	branch = web
-[submodule "projects/style"]
-	path = projects/style
-	url = git@github.com:amilleah/web.git
+[submodule "projects"]
+	path = projects
+	url = https://github.com/amilleah/projects.git

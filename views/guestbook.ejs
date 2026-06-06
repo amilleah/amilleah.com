@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>guestbook — amilleah.com</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/guestbook.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+  <main class="auto-padding">
+    <div class="guestbook-header">
+      <h1>guestbook</h1>
+      <p class="--muted">leave a note</p>
+    </div>
+
+    <form class="guestbook-form" name="guestbook" method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="guestbook">
+      <p hidden><input name="bot-field"></p>
+      <div class="form-row">
+        <input type="text" name="name" placeholder="name" required autocomplete="off">
+        <button type="submit">sign</button>
+      </div>
+      <textarea name="message" placeholder="leave a note" rows="3" required maxlength="3000"></textarea>
+      <small class="word-count">200 words left</small>
+    </form>
+
+    <% if (entries && entries.length > 0) { %>
+    <table class="guestbook-log">
+      <% entries.forEach(function(entry) { %>
+      <%
+        const d = new Date(entry.date);
+        const p = n => String(n).padStart(2, '0');
+        const h = d.getHours(); const h12 = h % 12 || 12;
+        const ts = `${d.getFullYear()}.${p(d.getMonth()+1)}.${p(d.getDate())}-${p(h12)}:${p(d.getMinutes())}:${p(d.getSeconds())} ${h < 12 ? 'am' : 'pm'}`;
+      %>
+      <tr>
+        <td class="entry-ts"><%- ts %></td>
+        <td class="entry-name"><%= entry.name %>:</td>
+        <td class="entry-msg"><%= entry.message %></td>
+      </tr>
+      <% }); %>
+    </table>
+    <% } %>
+  </main>
+  <script type="module" src="/guestbook/guestbook.js"></script>
+</body>
+</html>

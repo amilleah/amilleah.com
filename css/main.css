@@ -1,0 +1,148 @@
+@import './uchu.css';
+
+:root {
+  --color-muted:  var(--uchu-yin-5);
+  --color-accent: #df4a15;
+  --bg:           var(--uchu-yang);
+  --text:         var(--uchu-yin);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-muted: var(--uchu-yin-7);
+    --bg:          var(--uchu-yin);
+    --text:        var(--uchu-yang);
+  }
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, main {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, p {
+  font-size: 1em;
+  font-weight: normal;
+  line-height: 1.2em;
+  margin: 0 0 0.5em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-accent);
+}
+
+img, video {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  object-position: center top;
+}
+
+/* layout */
+
+.container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+}
+
+.auto-padding {
+  padding: 1.35em 1.35em 3.5em;
+}
+
+.y-scrollable {
+  overflow-y: scroll;
+  overflow-x: visible;
+}
+
+.--muted {
+  color: var(--color-muted);
+}
+
+p.links {
+  margin-top: 2em;
+  margin-bottom: 2em;
+}
+
+.flex-left {
+  flex: 0 0 30em;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background-color: var(--bg);
+  border-right: 1px solid var(--color-muted);
+}
+
+.flex-right {
+  flex: 1 1 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 1.35em 1.35em 3.5em;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--color-muted);
+  margin: 0.4em 0 0.75em;
+}
+
+.section-gap {
+  margin-top: 2em;
+  margin-bottom: 0;
+}
+
+.flex-left h1 {
+  margin-bottom: 1.5em;
+}
+
+/* rows */
+
+.row {
+  display: grid;
+  grid-template-columns: 8em 1fr 4em;
+  gap: 0.5em;
+  margin-bottom: 0.25em;
+  color: inherit;
+}
+
+.row-desc { color: var(--color-muted); }
+.row-date { color: var(--color-muted); text-align: right; }
+
+/* mobile */
+
+@media (max-width: 43em) {
+  .container {
+    flex-direction: column;
+  }
+  .y-scrollable {
+    overflow-y: visible;
+  }
+  .flex-left {
+    flex: 0 0 auto;
+    height: auto;
+    position: static;
+    padding-bottom: 0.75em;
+  }
+  .flex-right {
+    flex: 0 0 auto;
+    height: auto;
+  }
+}

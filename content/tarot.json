@@ -1,0 +1,8 @@
+{
+  "slug": "tarot",
+  "date": "2026.01",
+  "description": "terminal user interface",
+  "url": "https://github.com/amilleah/tarot",
+  "css": "/projects/tarot/tarot.css",
+  "script": "/projects/tarot/tarot.js"
+}

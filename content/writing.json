@@ -1,0 +1,15 @@
+{
+  "slug": "writing",
+  "date": "ongoing",
+  "description": "style, quantified",
+  "url": "https://github.com/amilleah/style",
+  "css": "/projects/writing/writing.css",
+  "script": "/projects/writing/writing.js",
+  "intro": "Each newsletter is a sequence of sentences projected into a two-dimensional style space derived from linguistic features. The axes are principal components fit on sentence-level measurements across all posts; only the stable 2D subspace is shown.",
+  "sections": [
+    { "key": "vaf-chart",       "label": "style generalization", "description": "Cross-newsletter variance accounted for (VAF): how well one newsletter's style subspace explains another's sentence variation. Syntactic features vs. SBERT semantic embeddings (384-dim) vs. random baseline. Higher = more shared structure." },
+    { "key": "stability-chart", "label": "subspace stability",   "description": "Principal angle between the full-sample subspace and 250 bootstrap-resampled subspaces. Top-2 is stable; top-3 is not. We stay in 2D to represent the newsletters." },
+    { "key": "loadings",        "label": "loadings" },
+    { "key": "methods",         "label": "methods" }
+  ]
+}

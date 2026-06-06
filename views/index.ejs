@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>amilleah.com</title>
+  <meta name="description" content="Amilleah is a cognitive neuroscientist and linguist.">
+  <meta name="author" content="Amilleah Rodriguez">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/guestbook.css">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="alternate" type="application/rss+xml" title="amilleah" href="/feed.xml">
+</head>
+
+<body>
+  <main class="container">
+
+    <section class="flex-left y-scrollable auto-padding">
+      <h1>Amilleah <span class="--muted">/əˈmɪliə/</span> is a cognitive neuroscientist and linguist.</h1>
+      <p>
+        Hi! I'm an incoming Linguistics PhD student at the University of Michigan, where I'll be working with Prof. Jon Brennan. I study how we represent and use context during real-time language processing. I use M/EEG and neural language models to investigate these topics. Previously, I worked with Prof. Liina Pylkkänen at the NYU Neurolinguistics Lab.
+      </p>
+      <p>
+        I am often developing open-source projects, working with time-series data, writing my newsletter, and updating this website!
+      </p>
+      <p class="links">
+        Links:
+        <a href="mailto:amilleah@umich.edu">amilleah@umich.edu</a>,
+        <a href="mailto:hey@amilleah.com">hey@amilleah.com</a>,
+        <a href="https://are.na/amilleah" target="_blank">are.na</a>,
+        <a href="https://github.com/amilleah" target="_blank">github</a>,
+        <a href="https://inprogress.works/archive/amilleah" target="_blank">inprogress.works</a>,
+        <a href="https://amilleah.substack.com" target="_blank">substack</a>
+      </p>
+
+      <p class="section-gap">research</p>
+      <hr>
+      <a class="row" href="/research/amilleahrodriguez_cv.pdf" data-pdf>
+        <span class="row-name">curriculum vitae</span>
+        <span class="row-desc"></span>
+        <span class="row-date"><%= cvUpdated %></span>
+      </a>
+
+      <p class="section-gap">projects</p>
+      <hr>
+      <%_ projects.forEach(function(project) { _%>
+      <a class="row" href="projects/<%= project.slug %>" data-slug="<%= project.slug %>">
+        <span class="row-name"><%= project.slug %></span>
+        <span class="row-desc"><%= project.description %></span>
+        <span class="row-date"><%= project.date %></span>
+      </a>
+      <%_ }); _%>
+
+      <a class="book-link" href="guestbook" data-slug="guestbook">
+        <div class="book">
+          <div class="cover"></div>
+          <div class="back"></div>
+          <div class="spine"></div>
+          <div class="pages"></div>
+          <div class="top-face"></div>
+          <div class="bottom-face"></div>
+        </div>
+      </a>
+
+    </section>
+
+    <section class="flex-right">
+      <% if (gistId) { %>
+      <div id="feed" class="auto-padding"></div>
+      <% } %>
+    </section>
+
+  </main>
+
+  <script>
+    const right = document.querySelector('.flex-right');
+    const defaultHtml = right.innerHTML;
+    let current = null;
+    const loadedScripts = new Set();
+
+    <% if (gistId) { %>
+    async function loadFeed() {
+      const feedEl = document.getElementById('feed');
+      if (!feedEl) return;
+      try {
+        const res  = await fetch('https://api.github.com/gists/<%= gistId %>', {
+          headers: { Accept: 'application/vnd.github+json' }
+        });
+        const gist = await res.json();
+        const items = JSON.parse(Object.values(gist.files)[0].content);
+        feedEl.innerHTML = items.map(item =>
+          `<p><span class="--muted" style="margin-right:2em">${item.timestamp}</span>${item.body}</p>`
+        ).join('<hr>');
+      } catch {}
+    }
+    <% } %>
+
+    function clear() {
+      right.innerHTML = defaultHtml;
+      current = null;
+      localStorage.removeItem('panel');
+      document.dispatchEvent(new CustomEvent('panel:cleared'));
+      <% if (gistId) { %>loadFeed();<% } %>
+    }
+
+    async function loadProject(link) {
+      const res  = await fetch(link.href);
+      const html = await res.text();
+      const doc  = new DOMParser().parseFromString(html, 'text/html');
+      right.innerHTML = (doc.querySelector('main') ?? doc.body).innerHTML;
+
+      doc.querySelectorAll('link[rel="stylesheet"]').forEach(el => {
+        const href = el.getAttribute('href');
+        if (!document.querySelector(`link[href="${href}"]`)) {
+          const s = document.createElement('link');
+          s.rel = 'stylesheet'; s.href = href;
+          document.head.appendChild(s);
+        }
+      });
+
+      doc.querySelectorAll('script[type="module"][src]').forEach(el => {
+        const src = el.getAttribute('src');
+        if (!loadedScripts.has(src)) {
+          loadedScripts.add(src);
+          const s = document.createElement('script');
+          s.type = 'module'; s.src = src;
+          document.body.appendChild(s);
+        }
+      });
+
+      document.dispatchEvent(new CustomEvent('panel:loaded', { detail: link.dataset.slug }));
+
+      current = link.dataset.slug;
+      localStorage.setItem('panel', current);
+    }
+
+    function loadPdf(link) {
+      right.innerHTML = `<embed src="${link.href}" type="application/pdf" style="width:100%;height:100%">`;
+      current = 'cv';
+      localStorage.setItem('panel', current);
+    }
+
+    document.querySelector('a[data-pdf]').addEventListener('click', e => {
+      e.preventDefault();
+      current === 'cv' ? clear() : loadPdf(e.currentTarget);
+    });
+
+    document.querySelectorAll('a[data-slug]').forEach(link => {
+      link.addEventListener('click', async e => {
+        e.preventDefault();
+        current === link.dataset.slug ? clear() : await loadProject(link);
+      });
+    });
+
+    const bookLink = document.querySelector('.book-link');
+    const bookEl   = bookLink?.querySelector('.book');
+    if (bookLink && bookEl) {
+      bookLink.addEventListener('mouseenter', () => {
+        bookEl.style.animationPlayState = 'paused';
+      });
+      bookLink.addEventListener('mouseleave', () => {
+        bookEl.style.animationPlayState = '';
+      });
+    }
+
+    <% if (gistId) { %>loadFeed();<% } %>
+
+    const saved = localStorage.getItem('panel');
+    if (saved === 'cv') {
+      loadPdf(document.querySelector('a[data-pdf]'));
+    } else if (saved) {
+      const link = document.querySelector(`a[data-slug="${saved}"]`);
+      if (link) loadProject(link);
+    }
+
+  </script>
+</body>
+</html>
