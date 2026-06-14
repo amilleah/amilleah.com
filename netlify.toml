@@ -21,6 +21,30 @@
   force = true
 
 [[redirects]]
+  from = "/photos"
+  to = "/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/photos/"
+  to = "/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/photos/:id"
+  to = "/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/photos/:id/"
+  to = "/index.html"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/guestbook"
   to = "/index.html"
   status = 200

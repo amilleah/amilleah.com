@@ -53,8 +53,10 @@
     function routeFromPath(pathname) {
       const path = pathname.replace(/\/+$/, '') || '/';
       if (path === '/guestbook') return { type: 'guestbook' };
-      const projectMatch = path.match(/^\/projects\/([^/]+)$/);
-      if (projectMatch) return { type: 'project', slug: projectMatch[1] };
+      const photoMatch = path.match(/^\/photos(?:\/(.+))?$/);
+      if (photoMatch) return { type: 'project', slug: 'photos', sub: photoMatch[1] };
+      const projectMatch = path.match(/^\/projects\/([^/]+)(?:\/(.+))?$/);
+      if (projectMatch) return { type: 'project', slug: projectMatch[1], sub: projectMatch[2] };
       return { type: 'default' };
     }
 
@@ -122,6 +124,10 @@
 
     window.addEventListener('popstate', () => {
       const route = routeFromPath(location.pathname);
+      if (route.type === 'project' && current === route.slug) {
+        document.dispatchEvent(new CustomEvent('panel:navigate', { detail: location.pathname }));
+        return;
+      }
       if (route.type !== 'default') {
         const slugAttr = route.type === 'guestbook' ? 'guestbook' : route.slug;
         const link = document.querySelector(`a[data-slug="${slugAttr}"]`);

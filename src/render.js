@@ -96,10 +96,11 @@ async function main() {
     }));
   }
 
+  const photosId = process.env.PHOTOS_ID || '';
   await Promise.all(Object.values(bySlug).map(async p => {
     const dir = path.join(ROOT, 'projects', p.slug);
     await fs.mkdir(dir, { recursive: true });
-    await fs.writeFile(path.join(dir, 'index.html'), project({ project: p }));
+    await fs.writeFile(path.join(dir, 'index.html'), project({ project: p, photosId }));
   }));
 }
 
