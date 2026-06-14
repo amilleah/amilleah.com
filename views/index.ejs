@@ -15,54 +15,7 @@
 <body>
   <main class="container">
 
-    <section class="flex-left y-scrollable auto-padding">
-      <h1>Amilleah <span class="--muted">/əˈmɪliə/</span> is a cognitive neuroscientist and linguist.</h1>
-      <p>
-        Hi! I'm an incoming Linguistics PhD student at the University of Michigan, where I'll be working with Prof. Jon Brennan. I study how we represent and use context during real-time language processing. I use M/EEG and neural language models to investigate these topics. Previously, I worked with Prof. Liina Pylkkänen at the NYU Neurolinguistics Lab.
-      </p>
-      <p>
-        I am often developing open-source projects, working with time-series data, writing my newsletter, and updating this website!
-      </p>
-      <p class="links">
-        Links:
-        <a href="mailto:amilleah@umich.edu">amilleah@umich.edu</a>,
-        <a href="mailto:hey@amilleah.com">hey@amilleah.com</a>,
-        <a href="https://are.na/amilleah" target="_blank">are.na</a>,
-        <a href="https://github.com/amilleah" target="_blank">github</a>,
-        <a href="https://inprogress.works/archive/amilleah" target="_blank">inprogress.works</a>,
-        <a href="https://amilleah.substack.com" target="_blank">substack</a>
-      </p>
-
-      <p class="section-gap">research</p>
-      <hr>
-      <a class="row" href="/research/amilleahrodriguez_cv.pdf" data-pdf target="_blank">
-        <span class="row-name">curriculum vitae</span>
-        <span class="row-desc"></span>
-        <span class="row-date"><%= cvUpdated %></span>
-      </a>
-
-      <p class="section-gap">projects</p>
-      <hr>
-      <%_ projects.forEach(function(project) { _%>
-      <a class="row" href="projects/<%= project.slug %>" data-slug="<%= project.slug %>">
-        <span class="row-name"><%= project.slug %></span>
-        <span class="row-desc"><%= project.description %></span>
-        <span class="row-date"><%= project.date %></span>
-      </a>
-      <%_ }); _%>
-
-      <a class="book-link" href="guestbook" data-slug="guestbook">
-        <div class="book">
-          <div class="cover"></div>
-          <div class="back"></div>
-          <div class="spine"></div>
-          <div class="pages"></div>
-          <div class="top-face"></div>
-          <div class="bottom-face"></div>
-        </div>
-      </a>
-
-    </section>
+    <%- include('_sidebar', { projects, cvUpdated }) %>
 
     <section class="flex-right">
       <% if (gistId) { %>
@@ -87,7 +40,9 @@
           headers: { Accept: 'application/vnd.github+json' }
         });
         const gist = await res.json();
-        const items = JSON.parse(Object.values(gist.files)[0].content);
+        const file = gist.files['rss.json'];
+        if (!file) return;
+        const items = JSON.parse(file.content);
         feedEl.innerHTML = items.map(item =>
           `<p><span class="--muted" style="margin-right:2em">${item.timestamp}</span>${item.body}</p>`
         ).join('<hr>');
@@ -95,16 +50,28 @@
     }
     <% } %>
 
-    function clear() {
-      right.innerHTML = defaultHtml;
-      current = null;
-      localStorage.removeItem('panel');
-      document.dispatchEvent(new CustomEvent('panel:cleared'));
-      <% if (gistId) { %>loadFeed();<% } %>
+    function routeFromPath(pathname) {
+      const path = pathname.replace(/\/+$/, '') || '/';
+      if (path === '/guestbook') return { type: 'guestbook' };
+      const projectMatch = path.match(/^\/projects\/([^/]+)$/);
+      if (projectMatch) return { type: 'project', slug: projectMatch[1] };
+      return { type: 'default' };
     }
 
-    async function loadProject(link) {
-      const res  = await fetch(link.href);
+    function clear({ push = true } = {}) {
+      right.innerHTML = defaultHtml;
+      current = null;
+      document.dispatchEvent(new CustomEvent('panel:cleared'));
+      <% if (gistId) { %>loadFeed();<% } %>
+      if (push) history.pushState({}, '', '/');
+    }
+
+    async function loadProject(link, { push = true } = {}) {
+      const slug       = link.dataset.slug;
+      const fragmentUrl = slug === 'guestbook' ? '/guestbook/index.html' : `/projects/${slug}/index.html`;
+      const prettyUrl   = slug === 'guestbook' ? '/guestbook' : `/projects/${slug}`;
+
+      const res  = await fetch(fragmentUrl);
       const html = await res.text();
       const doc  = new DOMParser().parseFromString(html, 'text/html');
       right.innerHTML = (doc.querySelector('main') ?? doc.body).innerHTML;
@@ -128,17 +95,16 @@
         }
       });
 
-      document.dispatchEvent(new CustomEvent('panel:loaded', { detail: link.dataset.slug }));
+      document.dispatchEvent(new CustomEvent('panel:loaded', { detail: slug }));
 
-      current = link.dataset.slug;
-      localStorage.setItem('panel', current);
+      current = slug;
+      if (push) history.pushState({}, '', prettyUrl);
     }
 
     function loadPdf(link) {
       document.dispatchEvent(new CustomEvent('panel:cleared'));
       right.innerHTML = `<embed src="${link.href}" type="application/pdf" style="width:100%;height:100%">`;
       current = 'cv';
-      localStorage.setItem('panel', current);
     }
 
     document.querySelector('a[data-pdf]').addEventListener('click', e => {
@@ -154,6 +120,16 @@
       });
     });
 
+    window.addEventListener('popstate', () => {
+      const route = routeFromPath(location.pathname);
+      if (route.type !== 'default') {
+        const slugAttr = route.type === 'guestbook' ? 'guestbook' : route.slug;
+        const link = document.querySelector(`a[data-slug="${slugAttr}"]`);
+        if (link) { loadProject(link, { push: false }); return; }
+      }
+      clear({ push: false });
+    });
+
     const bookLink = document.querySelector('.book-link');
     const bookEl   = bookLink?.querySelector('.book');
     if (bookLink && bookEl) {
@@ -167,12 +143,11 @@
 
     <% if (gistId) { %>loadFeed();<% } %>
 
-    const saved = localStorage.getItem('panel');
-    if (saved === 'cv') {
-      loadPdf(document.querySelector('a[data-pdf]'));
-    } else if (saved) {
-      const link = document.querySelector(`a[data-slug="${saved}"]`);
-      if (link) loadProject(link);
+    const initialRoute = routeFromPath(location.pathname);
+    if (initialRoute.type !== 'default') {
+      const slugAttr = initialRoute.type === 'guestbook' ? 'guestbook' : initialRoute.slug;
+      const link = document.querySelector(`a[data-slug="${slugAttr}"]`);
+      if (link) loadProject(link, { push: false });
     }
 
   </script>

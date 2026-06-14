@@ -26,27 +26,8 @@
       <small class="word-count">200 words left</small>
     </form>
 
-    <div id="guestbook-log" class="guestbook-log"></div>
+    <div id="guestbook-log" class="guestbook-log" data-gist-id="<%= guestbookId %>"></div>
   </main>
   <script type="module" src="/guestbook/guestbook.js"></script>
-  <% if (guestbookId) { %>
-  <script>
-    (async () => {
-      const logEl = document.getElementById('guestbook-log');
-      try {
-        const res   = await fetch('https://api.github.com/gists/<%= guestbookId %>', {
-          headers: { Accept: 'application/vnd.github+json' }
-        });
-        const gist  = await res.json();
-        const file  = gist.files['guestbook.json'];
-        if (!file) return;
-        const entries = JSON.parse(file.content);
-        logEl.innerHTML = entries.map(entry =>
-          `<p><span class="--muted" style="margin-right:2em">${entry.timestamp}</span>${entry.name}: ${entry.body}</p>`
-        ).join('<hr>');
-      } catch {}
-    })();
-  </script>
-  <% } %>
 </body>
 </html>

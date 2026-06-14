@@ -4,7 +4,7 @@ import path from 'path';
 
 const GIST_ID  = process.env.GIST_ID  || '';
 const TOKEN    = process.env.GITHUB_TOKEN || '';
-const FILENAME = 'feed.json';
+const FILENAME = 'rss.json';
 
 if (!GIST_ID || !TOKEN) {
   console.error('Set GITHUB_TOKEN and GIST_ID env vars.');

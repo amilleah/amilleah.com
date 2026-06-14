@@ -21,8 +21,10 @@ export const handler = async () => {
   });
   if (!res.ok) return { statusCode: 502, body: 'upstream error' };
 
-  const gist  = await res.json();
-  const items = JSON.parse(Object.values(gist.files)[0].content);
+  const gist = await res.json();
+  const file = gist.files['rss.json'];
+  if (!file) return { statusCode: 500, body: 'rss.json not found in gist' };
+  const items = JSON.parse(file.content);
 
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">

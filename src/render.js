@@ -12,10 +12,11 @@ async function readTemplate(name) {
 }
 
 async function main() {
-  const [index, project, guestbook] = await Promise.all([
+  const [index, project, guestbook, notFound] = await Promise.all([
     readTemplate('index'),
     readTemplate('project'),
     readTemplate('guestbook'),
+    readTemplate('404'),
   ]);
 
   const contentDir = path.join(ROOT, 'content');
@@ -48,6 +49,7 @@ async function main() {
 
   const gistId = process.env.GIST_ID || '';
   await fs.writeFile(path.join(ROOT, 'index.html'), index({ projects, cvUpdated, gistId }));
+  await fs.writeFile(path.join(ROOT, '404.html'), notFound({ projects, cvUpdated }));
 
   const guestbookId = process.env.GUESTBOOK_ID || '';
   const gbDir = path.join(ROOT, 'guestbook');

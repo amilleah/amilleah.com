@@ -1,0 +1,48 @@
+    <section class="flex-left y-scrollable auto-padding">
+      <h1>Amilleah <span class="--muted">/əˈmɪliə/</span> is a cognitive neuroscientist and linguist.</h1>
+      <p>
+        Hi! I'm an incoming Linguistics PhD student at the University of Michigan, where I'll be working with Prof. Jon Brennan. I study how we represent and use context during real-time language processing. I use M/EEG and neural language models to investigate these topics. Previously, I worked with Prof. Liina Pylkkänen at the NYU Neurolinguistics Lab.
+      </p>
+      <p>
+        I am often developing open-source projects, working with time-series data, writing my newsletter, and updating this website!
+      </p>
+      <p class="links">
+        Links:
+        <a href="mailto:amilleah@umich.edu">amilleah@umich.edu</a>,
+        <a href="mailto:hey@amilleah.com">hey@amilleah.com</a>,
+        <a href="https://are.na/amilleah" target="_blank">are.na</a>,
+        <a href="https://github.com/amilleah" target="_blank">github</a>,
+        <a href="https://inprogress.works/archive/amilleah" target="_blank">inprogress.works</a>,
+        <a href="https://amilleah.substack.com" target="_blank">substack</a>
+      </p>
+
+      <p class="section-gap">research</p>
+      <hr>
+      <a class="row" href="/research/amilleahrodriguez_cv.pdf" data-pdf target="_blank">
+        <span class="row-name">curriculum vitae</span>
+        <span class="row-desc"></span>
+        <span class="row-date"><%= cvUpdated %></span>
+      </a>
+
+      <p class="section-gap">projects</p>
+      <hr>
+      <%_ projects.forEach(function(project) { _%>
+      <a class="row" href="/projects/<%= project.slug %>" data-slug="<%= project.slug %>">
+        <span class="row-name"><%= project.slug %></span>
+        <span class="row-desc"><%= project.description %></span>
+        <span class="row-date"><%= project.date %></span>
+      </a>
+      <%_ }); _%>
+
+      <a class="book-link" href="/guestbook" data-slug="guestbook">
+        <div class="book">
+          <div class="cover"></div>
+          <div class="back"></div>
+          <div class="spine"></div>
+          <div class="pages"></div>
+          <div class="top-face"></div>
+          <div class="bottom-face"></div>
+        </div>
+      </a>
+
+    </section>
