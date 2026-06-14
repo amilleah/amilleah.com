@@ -26,24 +26,27 @@
       <small class="word-count">200 words left</small>
     </form>
 
-    <% if (entries && entries.length > 0) { %>
-    <table class="guestbook-log">
-      <% entries.forEach(function(entry) { %>
-      <%
-        const d = new Date(entry.date);
-        const p = n => String(n).padStart(2, '0');
-        const h = d.getHours(); const h12 = h % 12 || 12;
-        const ts = `${d.getFullYear()}.${p(d.getMonth()+1)}.${p(d.getDate())}-${p(h12)}:${p(d.getMinutes())}:${p(d.getSeconds())} ${h < 12 ? 'am' : 'pm'}`;
-      %>
-      <tr>
-        <td class="entry-ts"><%- ts %></td>
-        <td class="entry-name"><%= entry.name %>:</td>
-        <td class="entry-msg"><%= entry.message %></td>
-      </tr>
-      <% }); %>
-    </table>
-    <% } %>
+    <div id="guestbook-log" class="guestbook-log"></div>
   </main>
   <script type="module" src="/guestbook/guestbook.js"></script>
+  <% if (guestbookId) { %>
+  <script>
+    (async () => {
+      const logEl = document.getElementById('guestbook-log');
+      try {
+        const res   = await fetch('https://api.github.com/gists/<%= guestbookId %>', {
+          headers: { Accept: 'application/vnd.github+json' }
+        });
+        const gist  = await res.json();
+        const file  = gist.files['guestbook.json'];
+        if (!file) return;
+        const entries = JSON.parse(file.content);
+        logEl.innerHTML = entries.map(entry =>
+          `<p><span class="--muted" style="margin-right:2em">${entry.timestamp}</span>${entry.name}: ${entry.body}</p>`
+        ).join('<hr>');
+      } catch {}
+    })();
+  </script>
+  <% } %>
 </body>
 </html>

@@ -49,10 +49,10 @@ async function main() {
   const gistId = process.env.GIST_ID || '';
   await fs.writeFile(path.join(ROOT, 'index.html'), index({ projects, cvUpdated, gistId }));
 
-  const gbData = JSON.parse(await fs.readFile(path.join(ROOT, 'content', 'guestbook.json'), 'utf8'));
+  const guestbookId = process.env.GUESTBOOK_ID || '';
   const gbDir = path.join(ROOT, 'guestbook');
   await fs.mkdir(gbDir, { recursive: true });
-  await fs.writeFile(path.join(gbDir, 'index.html'), guestbook({ entries: gbData.entries }));
+  await fs.writeFile(path.join(gbDir, 'index.html'), guestbook({ guestbookId }));
 
   const photoDir = path.join(ROOT, 'projects', 'photos');
   const thumbDir = path.join(photoDir, 'thumbnail');

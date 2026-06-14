@@ -168,27 +168,3 @@
   margin-bottom: 0.25em;
 }
 
-.guestbook-log {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-.guestbook-log td {
-  padding: 0.1em 0.75em 0.1em 0;
-  vertical-align: top;
-  line-height: 1.4;
-}
-
-.entry-ts {
-  color: var(--color-muted);
-  white-space: nowrap;
-  font-size: 0.85em;
-}
-
-.entry-name {
-  white-space: nowrap;
-}
-
-.entry-msg {
-  width: 100%;
-}
