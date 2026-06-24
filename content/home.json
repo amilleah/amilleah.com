@@ -1,6 +1,10 @@
 {
   "projects": [
-    "color", "tarot", "kitty",
-    "writing", "zines", "photos"
+    "color", "kitty","photos","tarot",
+    "writing", "zines"
+  ],
+  "websites": [
+    { "name": "color.amilleah.com", "url": "https://color.amilleah.com"},
+    { "name": "html.fish", "url": "https://html.fish" }
   ]
 }

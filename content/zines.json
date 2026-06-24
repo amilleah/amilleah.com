@@ -1,12 +1,13 @@
 {
   "slug": "zines",
-  "date": "ongoing",
+  "date": "2026.06",
   "description": "eight-page editorials",
   "css": "/projects/zines/zines.css",
   "script": "/projects/zines/zines.js",
   "items": [
     { "slug": "a-prose-answer", "title": "a prose answer" },
     { "slug": "san-francisco",  "title": "san francisco" },
-    { "slug": "touch-grass",    "title": "touch grass" }
+    { "slug": "touch-grass",    "title": "touch grass" },
+    { "slug": "trout-swim",    "title": "trout swim / salmon run" }
   ]
 }

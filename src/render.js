@@ -40,6 +40,10 @@ async function main() {
     .map(s => bySlug[s] ?? { slug: s })
     .sort(byDate);
 
+  const toSite = s => (typeof s === 'string' ? { name: s, url: `https://${s}` } : s);
+  const websites = (home.websites ?? []).map(toSite);
+  const media = (home.media ?? []).map(toSite);
+
   let cvUpdated = '';
   try {
     const stat = await fs.stat(path.join(ROOT, 'research', 'amilleahrodriguez_cv.pdf'));
@@ -48,8 +52,8 @@ async function main() {
   } catch {}
 
   const gistId = process.env.GIST_ID || '';
-  await fs.writeFile(path.join(ROOT, 'index.html'), index({ projects, cvUpdated, gistId }));
-  await fs.writeFile(path.join(ROOT, '404.html'), notFound({ projects, cvUpdated }));
+  await fs.writeFile(path.join(ROOT, 'index.html'), index({ projects, websites, cvUpdated, gistId }));
+  await fs.writeFile(path.join(ROOT, '404.html'), notFound({ projects, websites, cvUpdated }));
 
   const guestbookId = process.env.GUESTBOOK_ID || '';
   const gbDir = path.join(ROOT, 'guestbook');

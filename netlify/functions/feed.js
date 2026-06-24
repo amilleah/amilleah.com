@@ -1,14 +1,20 @@
 const escape = s => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 const GH_ATTACHMENT = /^https:\/\/github\.com\/user-attachments\/assets\/[\w-]+$/;
+const SITE = 'https://amilleah.com';
 
 function renderBody(body) {
   let hasImage = false;
-  const html = body.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, src) => {
+  let html = body.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, (match, alt, src) => {
     if (!GH_ATTACHMENT.test(src)) return escape(match);
     hasImage = true;
     return `<img src="${src}" alt="${alt.replace(/"/g, '&quot;')}">`;
   });
+  // Proxied feed images: rewrite the relative /rss/img/ src to an absolute URL.
+  if (/<img\b[^>]*\bsrc="\/rss\/img\/[\w.-]+"/.test(html)) {
+    hasImage = true;
+    html = html.replace(/(<img\b[^>]*\bsrc=")(\/rss\/img\/[\w.-]+)"/g, `$1${SITE}$2"`);
+  }
   return hasImage ? `<![CDATA[${html}]]>` : escape(body);
 }
 

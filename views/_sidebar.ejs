@@ -6,14 +6,15 @@
       <p>
         I am often developing open-source projects, working with time-series data, writing my newsletter, and updating this website!
       </p>
+
       <p class="links">
-        Links:
+        Contact me:
         <a href="mailto:amilleah@umich.edu">amilleah@umich.edu</a>,
         <a href="mailto:hey@amilleah.com">hey@amilleah.com</a>,
-        <a href="https://are.na/amilleah" target="_blank">are.na</a>,
-        <a href="https://github.com/amilleah" target="_blank">github</a>,
-        <a href="https://inprogress.works/archive/amilleah" target="_blank">inprogress.works</a>,
-        <a href="https://amilleah.substack.com" target="_blank">substack</a>
+        <a href="https://are.na/amilleah">are.na</a>,
+        <a href="https://github.com/amilleah">github</a>,
+        <a href="https://inprogress.works/archive/amilleah">inprogress.works</a>,
+        <a href="https://amilleah.substack.com">substack</a>
       </p>
 
       <p class="section-gap">research</p>
@@ -33,6 +34,16 @@
         <span class="row-date"><%= project.date %></span>
       </a>
       <%_ }); _%>
+
+      <%_ if (typeof websites !== 'undefined' && websites.length) { _%>
+      <p class="section-gap">websites</p>
+      <hr>
+      <%_ websites.forEach(function(site) { _%>
+      <a class="row" href="<%= site.url %>" target="_blank" rel="noopener">
+        <span class="row-name"><%= site.name %></span>
+      </a>
+      <%_ }); _%>
+      <%_ } _%>
 
       <a class="book-link" href="/guestbook" data-slug="guestbook">
         <div class="book">

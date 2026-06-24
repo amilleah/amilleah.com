@@ -1,7 +1,7 @@
 {
   "slug": "color",
   "date": "2026.04",
-  "description": "mean-shift palette generator",
+  "description": "mean-shift color palette",
   "url": "https://color.amilleah.com",
   "css": "/projects/color/color.css",
   "script": "/projects/color/color.js"
