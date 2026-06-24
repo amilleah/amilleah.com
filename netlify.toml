@@ -9,6 +9,12 @@
   status = 200
 
 [[redirects]]
+  from = "/rss/img/*"
+  to = "/.netlify/functions/images/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
   from = "/projects/:slug"
   to = "/index.html"
   status = 200
