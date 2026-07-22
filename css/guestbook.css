@@ -10,7 +10,8 @@
   text-decoration: none;
   position: fixed;
   bottom: 1.35em;
-  left: 1.35em;
+  left: calc(30em - 1.35em);
+  transform: translateX(-100%);
   perspective: 600px;
   perspective-origin: center center;
   overflow: visible;
@@ -20,6 +21,7 @@
   .book-link {
     left: unset;
     right: 1.35em;
+    transform: none;
   }
 }
 
