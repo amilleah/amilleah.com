@@ -4,6 +4,7 @@
     "writing", "zines"
   ],
   "websites": [
+    { "name": "localhost.starstar.website", "url": "https://localhost.starstar.website"},
     { "name": "meowmeow.website", "url": "https://meowmeow.website"},
     { "name": "color.amilleah.com", "url": "https://color.amilleah.com"},
     { "name": "html.fish", "url": "https://html.fish" }
