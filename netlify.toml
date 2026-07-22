@@ -1,5 +1,5 @@
 [build]
-  command = "node src/render.js"
+  command = "node src/render.js && node src/notice.js"
   publish = "."
   functions = "netlify/functions"
 
