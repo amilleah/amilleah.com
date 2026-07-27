@@ -37,7 +37,7 @@
   animation: book-spin 20s linear infinite;
 }
 
-/* front cover: pushed forward by d/2 */
+/* front cover */
 .cover {
   position: absolute;
   inset: 0;
@@ -47,7 +47,7 @@
   box-shadow: 4px 6px 16px rgba(0,0,0,0.22);
 }
 
-/* back cover: rotated 180deg, pushed to z = -d/2 */
+/* back cover */
 .back {
   position: absolute;
   inset: 0;
@@ -56,7 +56,7 @@
   transform: rotateY(180deg) translateZ(calc(var(--d) / 2));
 }
 
-/* spine: left edge, kraft tan, centered on z-axis */
+/* spine */
 .spine {
   position: absolute;
   top: 0;
@@ -67,7 +67,7 @@
   transform: translateX(calc(-1 * var(--d) / 2)) rotateY(-90deg);
 }
 
-/* pages: right edge, off-white, centered on z-axis */
+/* pages */
 .pages {
   position: absolute;
   top: 0;
@@ -78,7 +78,7 @@
   transform: translateX(calc(var(--w) - var(--d) / 2)) rotateY(90deg);
 }
 
-/* top + bottom faces: close the book solid */
+/* top + bottom faces */
 .top-face,
 .bottom-face {
   position: absolute;

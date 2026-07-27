@@ -65,13 +65,7 @@
   to = "/index.html"
   status = 200
 
-# --- legacy /projects/<slug> page links -> top-level canonical (301). The
-#     /projects/<slug>/index.html fragments are deeper paths and stay reachable. ---
-[[redirects]]
-  from = "/projects/sky"
-  to = "/here"
-  status = 301
-  force = true
+#---- legacy redirect...
 [[redirects]]
   from = "/projects/:slug"
   to = "/:slug"

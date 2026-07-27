@@ -29,13 +29,10 @@ const gh = (url, opts = {}) =>
     },
   });
 
-// Upload an image to the assets repo via the Git Data API (handles files >1 MB),
-// then return a jsDelivr CDN URL pinned to the new commit SHA.
 async function uploadImage(localPath) {
   const buf      = readFileSync(localPath);
   const filename = `${Date.now()}-${path.basename(localPath).replace(/[^\w.-]/g, '_')}`;
 
-  // Ensure the public assets repo exists (auto_init gives us a `main` branch).
   if ((await gh(`/repos/${ASSETS_REPO}`)).status === 404) {
     const name = ASSETS_REPO.split('/')[1];
     const mk = await gh('/user/repos', {

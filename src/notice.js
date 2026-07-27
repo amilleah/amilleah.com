@@ -1,9 +1,5 @@
 import { execFileSync } from 'child_process';
 
-// Posts one plain "site update" entry to the rss.json gist per deploy.
-// Runs after render.js in the Netlify build; exits 0 on any failure so it
-// can never break a deploy. Not part of the local build.
-
 const GIST_ID  = process.env.GIST_ID || '';
 const TOKEN    = process.env.GITHUB_TOKEN || '';
 const FILENAME = 'rss.json';
@@ -19,8 +15,6 @@ try {
   const head = process.env.COMMIT_REF || git(['rev-parse', 'HEAD']);
   const prev = process.env.CACHED_COMMIT_REF || '';
 
-  // Subjects of every commit in this deploy; fall back to HEAD alone when
-  // the previous deploy ref is missing or unreachable (shallow clone).
   let subjects;
   try {
     subjects = prev && prev !== head

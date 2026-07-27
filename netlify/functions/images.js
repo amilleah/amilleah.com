@@ -1,5 +1,3 @@
-// Proxies images out of the private assets repo so they can be hot-linked
-// from the feed without exposing a token in the browser.
 const TYPES = {
   webp: 'image/webp', jpg: 'image/jpeg', jpeg: 'image/jpeg',
   png: 'image/png', gif: 'image/gif', svg: 'image/svg+xml',

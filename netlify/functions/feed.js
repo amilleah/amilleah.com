@@ -10,7 +10,6 @@ function renderBody(body) {
     hasImage = true;
     return `<img src="${src}" alt="${alt.replace(/"/g, '&quot;')}">`;
   });
-  // Proxied feed images: rewrite the relative /rss/img/ src to an absolute URL.
   if (/<img\b[^>]*\bsrc="\/rss\/img\/[\w.-]+"/.test(html)) {
     hasImage = true;
     html = html.replace(/(<img\b[^>]*\bsrc=")(\/rss\/img\/[\w.-]+)"/g, `$1${SITE}$2"`);
