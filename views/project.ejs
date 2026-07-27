@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= project.slug %> — amilleah.com</title>
+  <title><%= project.slug %></title>
   <link rel="stylesheet" href="/css/main.css">
   <% if (project.css) { %>
   <link rel="stylesheet" href="<%= project.css %>">
@@ -19,6 +19,9 @@
     <h1><%= project.slug %></h1>
     <% if (project.description) { %>
     <p><%= project.description %></p>
+    <% } %>
+    <% if (project.body) { %>
+    <%- project.body %>
     <% } %>
     <% if (project.url) { %>
     <p><a href="<%= project.url %>" target="_blank"><%= project.url %></a></p>
@@ -56,7 +59,9 @@
       </div>
     </div>
     <% } %>
-    <% if (project.script) { %>
+    <% if (project.tiles && project.tiles.length) { %>
+    <%- include('_squares', { project }) %>
+    <% } else if (project.script) { %>
     <div id="app" data-base="/projects/<%= project.slug %>/"></div>
     <% } %>
   </main>

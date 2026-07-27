@@ -1,12 +1,39 @@
 {
   "projects": [
-    "color", "kitty","photos","tarot",
-    "writing", "zines"
+    "kitty",
+    "photos",
+    "tarot",
+    "writing",
+    "zines"
   ],
-  "websites": [
-    { "name": "localhost.starstar.website", "url": "https://localhost.starstar.website"},
-    { "name": "meowmeow.website", "url": "https://meowmeow.website"},
-    { "name": "color.amilleah.com", "url": "https://color.amilleah.com"},
-    { "name": "html.fish", "url": "https://html.fish" }
+  "pages": [
+    "here"
+  ],
+  "sites": [
+    {
+      "name": "color.amilleah.com",
+      "url": "https://color.amilleah.com",
+      "description": "princeton art museum archive"
+    },
+    {
+      "name": "localhost.starstar.website",
+      "url": "https://localhost.starstar.website",
+      "description": "are.na channel rss feed"
+    },
+    {
+      "name": "meowmeow.website",
+      "url": "https://meowmeow.website",
+      "description": "cat coworking space"
+    },
+    {
+      "name": "html.fish",
+      "url": "https://html.fish",
+      "description": "collect ><fish> tags"
+    }
+  ],
+  "haiku": [
+    "here lies what could be",
+    "a cool page on this website",
+    "but for now, is blank."
   ]
 }

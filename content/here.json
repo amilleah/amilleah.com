@@ -1,0 +1,7 @@
+{
+  "slug": "here",
+  "description": "visual timecourse",
+  "itemsDir": "items",
+  "css": "/projects/here/here.css",
+  "script": "/projects/here/here.js"
+}

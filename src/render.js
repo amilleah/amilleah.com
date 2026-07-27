@@ -1,8 +1,9 @@
 import ejs from 'ejs';
 import { promises as fs } from 'fs';
-import { execFileSync } from 'child_process';
 import path from 'path';
+import { marked } from 'marked';
 import { fileURLToPath } from 'url';
+import { buildTable, makeThumbnail } from './table.js';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -40,8 +41,11 @@ async function main() {
     .map(s => bySlug[s] ?? { slug: s })
     .sort(byDate);
 
+  const pages = (home.pages ?? [])
+    .map(s => bySlug[s] ?? { slug: s });
+
   const toSite = s => (typeof s === 'string' ? { name: s, url: `https://${s}` } : s);
-  const websites = (home.websites ?? []).map(toSite);
+  const sites = (home.sites ?? []).map(toSite);
   const media = (home.media ?? []).map(toSite);
 
   let cvUpdated = '';
@@ -52,8 +56,8 @@ async function main() {
   } catch {}
 
   const gistId = process.env.GIST_ID || '';
-  await fs.writeFile(path.join(ROOT, 'index.html'), index({ projects, websites, cvUpdated, gistId }));
-  await fs.writeFile(path.join(ROOT, '404.html'), notFound({ projects, websites, cvUpdated }));
+  await fs.writeFile(path.join(ROOT, 'index.html'), index({ projects, pages, sites, cvUpdated, gistId }));
+  await fs.writeFile(path.join(ROOT, '404.html'), notFound({ projects, pages, sites, cvUpdated, haiku: home.haiku ?? [] }));
 
   const guestbookId = process.env.GUESTBOOK_ID || '';
   const gbDir = path.join(ROOT, 'guestbook');
@@ -66,13 +70,7 @@ async function main() {
   const photoFiles = (await fs.readdir(photoDir)).filter(f => /\.(webp|jpe?g|png|gif)$/i.test(f));
   for (const file of photoFiles) {
     const thumb = path.join(thumbDir, file);
-    try { await fs.access(thumb); } catch {
-      execFileSync('convert', [
-        path.join(photoDir, file),
-        '-resize', '384x384^', '-gravity', 'center', '-extent', '384x384',
-        '-quality', '80', thumb,
-      ]);
-    }
+    try { await fs.access(thumb); } catch { makeThumbnail(path.join(photoDir, file), thumb, 384); }
   }
 
   const photosData = bySlug['photos'];
@@ -99,6 +97,21 @@ async function main() {
       }
     }));
   }
+
+  const hereData = bySlug['here'];
+  if (hereData) {
+    try {
+      hereData.tiles = await buildTable(path.join(ROOT, 'projects', 'here', hereData.itemsDir || 'items'));
+    } catch (err) {
+      console.error('here tiles:', err.message);
+      hereData.tiles = [];
+    }
+  }
+
+  await Promise.all(Object.values(bySlug).map(async p => {
+    const mdPath = path.join(ROOT, 'projects', p.slug, `${p.slug}.md`);
+    try { p.body = marked.parse(await fs.readFile(mdPath, 'utf8')); } catch {}
+  }));
 
   const photosId = process.env.PHOTOS_ID || '';
   await Promise.all(Object.values(bySlug).map(async p => {

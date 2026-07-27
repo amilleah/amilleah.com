@@ -17,6 +17,12 @@ importers:
       ejs:
         specifier: ^3.1.9
         version: 3.1.10
+      marked:
+        specifier: ^18.0.7
+        version: 18.0.7
+      tz-lookup:
+        specifier: ^6.1.25
+        version: 6.1.25
 
 packages:
 
@@ -48,12 +54,20 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  marked@18.0.7:
+    resolution: {integrity: sha512-iDVQ5ldaiKXn6b2JroX5kgRfmwgqolW7NpaEzTl1k/2Zh1njIEN9yniyLV/mOvWwtsE8OGgkjsCYvijuPk1dtA==}
+    engines: {node: '>= 20'}
+    hasBin: true
+
   minimatch@5.1.9:
     resolution: {integrity: sha512-7o1wEA2RyMP7Iu7GNba9vc0RWWGACJOCZBJX2GJWip0ikV+wcOsgVuY9uE8CPiyQhkGFSlhuSkZPavN7u1c2Fw==}
     engines: {node: '>=10'}
 
   picocolors@1.1.1:
     resolution: {integrity: sha512-xceH2snhtb5M9liqDsmEw56le376mTZkEX/jEb/RxNFyegNul7eNslCXP9FDj/Lcu0X8KEyMceP2ntpaHrDEVA==}
+
+  tz-lookup@6.1.25:
+    resolution: {integrity: sha512-fFewT9o1uDzsW1QnUU1ValqaihFnwiUiiHr1S79/fxOzKXYYvX+EHeRnpvQJ9B3Qg67wPXT6QF2Esc4pFOrvLg==}
 
 snapshots:
 
@@ -83,8 +97,12 @@ snapshots:
       filelist: 1.0.6
       picocolors: 1.1.1
 
+  marked@18.0.7: {}
+
   minimatch@5.1.9:
     dependencies:
       brace-expansion: 2.1.1
 
   picocolors@1.1.1: {}
+
+  tz-lookup@6.1.25: {}

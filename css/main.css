@@ -113,8 +113,6 @@ hr {
   margin-bottom: 1.5em;
 }
 
-/* rows */
-
 .row {
   display: grid;
   grid-template-columns: 8em 1fr 4em;
@@ -125,6 +123,16 @@ hr {
 
 .row-desc { color: var(--color-muted); }
 .row-date { color: var(--color-muted); text-align: right; }
+.row-ext { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--color-muted); vertical-align: text-bottom; }
+
+.row.page,
+.row.site { grid-template-columns: 1fr auto; }
+.row.page .row-desc,
+.row.site .row-desc { text-align: right; }
+
+.row:hover .row-desc,
+.row:hover .row-date,
+.row:hover .row-ext { color: var(--color-accent); }
 
 /* mobile */
 

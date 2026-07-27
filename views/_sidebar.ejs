@@ -28,19 +28,38 @@
       <p class="section-gap">projects</p>
       <hr>
       <%_ projects.forEach(function(project) { _%>
-      <a class="row" href="/projects/<%= project.slug %>" data-slug="<%= project.slug %>">
+      <a class="row" href="/<%= project.slug %>" data-slug="<%= project.slug %>">
         <span class="row-name"><%= project.slug %></span>
         <span class="row-desc"><%= project.description %></span>
         <span class="row-date"><%= project.date %></span>
       </a>
       <%_ }); _%>
 
-      <%_ if (typeof websites !== 'undefined' && websites.length) { _%>
-      <p class="section-gap">websites</p>
+      <%_ if (typeof pages !== 'undefined' && pages.length) { _%>
+      <p class="section-gap">pages</p>
       <hr>
-      <%_ websites.forEach(function(site) { _%>
-      <a class="row" href="<%= site.url %>" target="_blank" rel="noopener">
-        <span class="row-name"><%= site.name %></span>
+      <%_ pages.forEach(function(page) { _%>
+      <%_ if (page.url) { _%>
+      <a class="row page" href="<%= page.url %>" target="_blank" rel="noopener">
+        <span class="row-name"><%= page.slug %> <span class="row-ext" aria-hidden="true">↗</span></span>
+        <span class="row-desc"><%= page.description || '' %></span>
+      </a>
+      <%_ } else { _%>
+      <a class="row page" href="/<%= page.slug %>" data-slug="<%= page.slug %>">
+        <span class="row-name"><%= page.slug %></span>
+        <span class="row-desc"><%= page.description || '' %></span>
+      </a>
+      <%_ } _%>
+      <%_ }); _%>
+      <%_ } _%>
+
+      <%_ if (typeof sites !== 'undefined' && sites.length) { _%>
+      <p class="section-gap">sites</p>
+      <hr>
+      <%_ sites.forEach(function(site) { _%>
+      <a class="row site" href="<%= site.url %>" target="_blank" rel="noopener">
+        <span class="row-name"><%= site.name %> <span class="row-ext" aria-hidden="true">↗</span></span>
+        <%_ if (site.description) { _%><span class="row-desc"><%= site.description %></span><%_ } _%>
       </a>
       <%_ }); _%>
       <%_ } _%>

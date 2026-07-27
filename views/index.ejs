@@ -15,7 +15,7 @@
 <body>
   <main class="container">
 
-    <%- include('_sidebar', { projects, websites, cvUpdated }) %>
+    <%- include('_sidebar', { projects, pages, sites, cvUpdated }) %>
 
     <section class="flex-right">
       <% if (gistId) { %>
@@ -52,17 +52,19 @@
 
     function routeFromPath(pathname) {
       const path = pathname.replace(/\/+$/, '') || '/';
+      if (path === '/') return { type: 'default' };
       if (path === '/guestbook') return { type: 'guestbook' };
-      const photoMatch = path.match(/^\/photos(?:\/(.+))?$/);
-      if (photoMatch) return { type: 'project', slug: 'photos', sub: photoMatch[1] };
-      const projectMatch = path.match(/^\/projects\/([^/]+)(?:\/(.+))?$/);
-      if (projectMatch) return { type: 'project', slug: projectMatch[1], sub: projectMatch[2] };
+      const legacy = path.match(/^\/projects\/([^/]+)(?:\/(.+))?$/);
+      if (legacy) return { type: 'project', slug: legacy[1], sub: legacy[2] };
+      const m = path.match(/^\/([^/]+)(?:\/(.+))?$/);
+      if (m) return { type: 'project', slug: m[1], sub: m[2] };
       return { type: 'default' };
     }
 
     function clear({ push = true } = {}) {
       right.innerHTML = defaultHtml;
       current = null;
+      document.title = 'amilleah.com';
       document.dispatchEvent(new CustomEvent('panel:cleared'));
       <% if (gistId) { %>loadFeed();<% } %>
       if (push) history.pushState({}, '', '/');
@@ -71,7 +73,7 @@
     async function loadProject(link, { push = true } = {}) {
       const slug       = link.dataset.slug;
       const fragmentUrl = slug === 'guestbook' ? '/guestbook/index.html' : `/projects/${slug}/index.html`;
-      const prettyUrl   = slug === 'guestbook' ? '/guestbook' : `/projects/${slug}`;
+      const prettyUrl   = slug === 'guestbook' ? '/guestbook' : `/${slug}`;
 
       const res  = await fetch(fragmentUrl);
       const html = await res.text();
@@ -100,6 +102,7 @@
       document.dispatchEvent(new CustomEvent('panel:loaded', { detail: slug }));
 
       current = slug;
+      document.title = slug;
       if (push) history.pushState({}, '', prettyUrl);
     }
 

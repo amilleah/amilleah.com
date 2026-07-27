@@ -15,63 +15,67 @@
   force = true
 
 [[redirects]]
-  from = "/projects/:slug"
+  from = "/now"
   to = "/index.html"
   status = 200
-  force = true
-
 [[redirects]]
-  from = "/projects/:slug/"
+  from = "/here"
   to = "/index.html"
   status = 200
-  force = true
+[[redirects]]
+  from = "/color"
+  to = "/index.html"
+  status = 200
+[[redirects]]
+  from = "/kitty"
+  to = "/index.html"
+  status = 200
+[[redirects]]
+  from = "/tarot"
+  to = "/index.html"
+  status = 200
+[[redirects]]
+  from = "/writing"
+  to = "/index.html"
+  status = 200
+[[redirects]]
+  from = "/zines"
+  to = "/index.html"
+  status = 200
+[[redirects]]
+  from = "/colophon"
+  to = "/index.html"
+  status = 200
 
 [[redirects]]
   from = "/photos"
   to = "/index.html"
   status = 200
-  force = true
-
-[[redirects]]
-  from = "/photos/"
-  to = "/index.html"
-  status = 200
-  force = true
-
 [[redirects]]
   from = "/photos/:id"
   to = "/index.html"
   status = 200
-  force = true
-
-[[redirects]]
-  from = "/photos/:id/"
-  to = "/index.html"
-  status = 200
-  force = true
 
 [[redirects]]
   from = "/guestbook"
   to = "/index.html"
   status = 200
-  force = true
-
-[[redirects]]
-  from = "/guestbook/"
-  to = "/index.html"
-  status = 200
-  force = true
-
 [[redirects]]
   from = "/rss"
   to = "/index.html"
   status = 200
-  force = true
 
+# --- legacy /projects/<slug> page links -> top-level canonical (301). The
+#     /projects/<slug>/index.html fragments are deeper paths and stay reachable. ---
 [[redirects]]
-  from = "/rss/"
-  to = "/index.html"
-  status = 200
+  from = "/projects/sky"
+  to = "/here"
+  status = 301
+  force = true
+[[redirects]]
+  from = "/projects/:slug"
+  to = "/:slug"
+  status = 301
   force = true
 
 [[redirects]]

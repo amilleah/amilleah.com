@@ -1,0 +1,25 @@
+<div class="here" data-base="/projects/<%= project.slug %>/">
+  <div class="here-controls">
+    <span class="here-label">sort by:</span>
+    <button class="here-sort" type="button" data-sort="time">time</button>
+    <button class="here-sort" type="button" data-sort="location">location</button>
+    <button class="here-sort is-active" type="button" data-sort="color">color</button>
+    <button class="here-expand" type="button" data-expand>expand all</button>
+  </div>
+
+  <div class="here-field">
+    <%_ project.tiles.forEach(function(t) { _%>
+    <div class="sq" data-index="<%= t.index %>" data-ts="<%= t.ts %>" data-loc="<%= t.locRank %>" data-color="<%= t.colorRank %>">
+      <img class="sq-img" src="/projects/<%= project.slug %>/<%= project.itemsDir || 'items' %>/thumbnail/<%= t.file %>" alt="" loading="lazy" decoding="async">
+      <table class="sq-meta">
+        <tbody>
+          <tr><th scope="row">latitude</th><td><%= t.lat == null ? '—' : t.lat.toFixed(2) %></td></tr>
+          <tr><th scope="row">longitude</th><td><%= t.lon == null ? '—' : t.lon.toFixed(2) %></td></tr>
+          <tr><th scope="row">altitude</th><td><%= t.alt == null ? '—' : Math.round(t.alt) + ' m' %></td></tr>
+          <tr><th scope="row">time</th><td><%= t.local %></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <%_ }); _%>
+  </div>
+</div>
