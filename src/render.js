@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import { marked } from 'marked';
 import { fileURLToPath } from 'url';
-import { buildTable, makeThumbnail } from './table.js';
+import { buildTable } from './table.js';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -64,27 +64,6 @@ async function main() {
   await fs.mkdir(gbDir, { recursive: true });
   await fs.writeFile(path.join(gbDir, 'index.html'), guestbook({ guestbookId }));
 
-  const photoDir = path.join(ROOT, 'projects', 'photos');
-  const thumbDir = path.join(photoDir, 'thumbnail');
-  await fs.mkdir(thumbDir, { recursive: true });
-  const photoFiles = (await fs.readdir(photoDir)).filter(f => /\.(webp|jpe?g|png|gif)$/i.test(f));
-  for (const file of photoFiles) {
-    const thumb = path.join(thumbDir, file);
-    try { await fs.access(thumb); } catch { makeThumbnail(path.join(photoDir, file), thumb, 384); }
-  }
-
-  const photosData = bySlug['photos'];
-  if (photosData) {
-    try {
-      const entries = await fs.readdir(photoDir);
-      photosData.photos = entries
-        .filter(f => /\.(webp|jpe?g|png|gif)$/i.test(f))
-        .sort((a, b) => parseInt(a) - parseInt(b));
-    } catch {
-      photosData.photos = [];
-    }
-  }
-
   const zinesData = bySlug['zines'];
   if (zinesData?.items?.length) {
     await Promise.all(zinesData.items.map(async item => {
@@ -113,11 +92,10 @@ async function main() {
     try { p.body = marked.parse(await fs.readFile(mdPath, 'utf8')); } catch {}
   }));
 
-  const photosId = process.env.PHOTOS_ID || '';
   await Promise.all(Object.values(bySlug).map(async p => {
     const dir = path.join(ROOT, 'projects', p.slug);
     await fs.mkdir(dir, { recursive: true });
-    await fs.writeFile(path.join(dir, 'index.html'), project({ project: p, photosId }));
+    await fs.writeFile(path.join(dir, 'index.html'), project({ project: p }));
   }));
 }
 

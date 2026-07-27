@@ -43,22 +43,6 @@
       <% }); %>
     </div>
     <% } %>
-    <% if (project.photos && project.photos.length) { %>
-    <div class="photos-grid">
-      <% project.photos.forEach(function(file) { %>
-      <img class="photo-thumb" data-id="<%= file.replace(/\.[^.]+$/, '') %>" src="/projects/<%= project.slug %>/thumbnail/<%= file %>" data-full="/projects/<%= project.slug %>/<%= file %>" alt="">
-      <% }); %>
-    </div>
-    <div class="photo-single" hidden data-gist-id="<%= photosId %>">
-      <button class="photo-back" type="button">&lt; back</button>
-      <div class="photo-single-row">
-        <div class="photo-single-frame">
-          <img class="photo-single-img" alt="">
-          <div class="photo-regions"></div>
-        </div>
-      </div>
-    </div>
-    <% } %>
     <% if (project.tiles && project.tiles.length) { %>
     <%- include('_squares', { project }) %>
     <% } else if (project.script) { %>

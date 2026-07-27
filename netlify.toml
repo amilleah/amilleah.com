@@ -14,10 +14,8 @@
   status = 200
   force = true
 
-[[redirects]]
-  from = "/now"
-  to = "/index.html"
-  status = 200
+# --- top-level canonical URLs: serve the SPA shell. Non-force, so real files
+#     (/css, /research, /projects/<slug>/index.html fragments, functions) win. ---
 [[redirects]]
   from = "/here"
   to = "/index.html"
@@ -44,15 +42,6 @@
   status = 200
 [[redirects]]
   from = "/colophon"
-  to = "/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/photos"
-  to = "/index.html"
-  status = 200
-[[redirects]]
-  from = "/photos/:id"
   to = "/index.html"
   status = 200
 
